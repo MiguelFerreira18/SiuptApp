@@ -1,3 +1,12 @@
 <resources>
     <string name="app_name">SiuptApp</string>
+
+    <string-array name="my_header_title">
+        <item></item>
+        <item>Segunda</item>
+        <item>Terça</item>
+        <item>Quarta</item>
+        <item>quinta</item>
+        <item>Sexta</item>
+    </string-array>
 </resources>
