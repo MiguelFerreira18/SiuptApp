@@ -2,7 +2,10 @@ package devapp.upt.siuptapp;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
@@ -30,17 +33,27 @@ public class TimeTable extends AppCompatActivity {
     ArrayList<Schedule> horarios;
     TimetableView myTimeTable;
     RequestQueue queue;
+    Db_handler db;
+    boolean connected = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_time_table);
+
         horarios = new ArrayList<>();
         myTimeTable = findViewById(R.id.myTimeTable);
         i = getIntent();
         token = i.getStringExtra(Menu.tokenS);
+        db = new Db_handler(this.getApplicationContext());
+        if(connected){
         getHorario();
+        }else {
+
+        }
     }
+
+
 
     /**
      * arranja o horario do aluno  pelo webservice
@@ -73,7 +86,6 @@ public class TimeTable extends AppCompatActivity {
                                     horarios.add(s);
                                     myTimeTable.add(horarios);
                                     Toast.makeText(TimeTable.this, " " + horarios, Toast.LENGTH_SHORT).show();
-                                    seeH();
                                 } catch (JSONException e) {
                                     e.printStackTrace();
                                 }
@@ -118,7 +130,6 @@ public class TimeTable extends AppCompatActivity {
             }
         });
         queue.add(sr);
-
     }//fim do getUc
 
 }
