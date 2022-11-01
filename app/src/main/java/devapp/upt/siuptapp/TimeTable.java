@@ -30,6 +30,7 @@ public class TimeTable extends AppCompatActivity {
     ArrayList<Schedule> horarios;
     TimetableView myTimeTable;
     RequestQueue queue;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,6 +41,10 @@ public class TimeTable extends AppCompatActivity {
         token = i.getStringExtra(Menu.tokenS);
         getHorario();
     }
+
+    /**
+     * arranja o horario do aluno  pelo webservice
+     */
     public void getHorario() {
         queue = Volley.newRequestQueue(TimeTable.this);
         String myUrl = "https://alunos.upt.pt/~abilioc/dam.php?func=horario&token=" + token;
@@ -64,7 +69,7 @@ public class TimeTable extends AppCompatActivity {
                                     s.setProfessorName(jo.getString("tipoAula"));
                                     s.setStartTime(new Time(jo.getInt("horaInicio"), 0));
                                     s.setEndTime(new Time(jo.getInt("horaFim"), 0));
-                                    s.setDay(jo.getInt("diaSemana")-2);
+                                    s.setDay(jo.getInt("diaSemana") - 2);
                                     horarios.add(s);
                                     myTimeTable.add(horarios);
                                     Toast.makeText(TimeTable.this, " " + horarios, Toast.LENGTH_SHORT).show();
@@ -86,13 +91,17 @@ public class TimeTable extends AppCompatActivity {
             }
         });
         queue.add(jsonObjectRequest);
-    }
+    }//fim do getHorario
 
+    /**
+     * vai buscar o nome da uc
+     *
+     * @param uc
+     * @param callback
+     */
     public void getUc(int uc, final ICallBack callback) {
-        String  myUrl = "https://alunos.upt.pt/~abilioc/dam.php?func=uc&codigo=" + uc;
+        String myUrl = "https://alunos.upt.pt/~abilioc/dam.php?func=uc&codigo=" + uc;
         Log.d("cenas", "getUc: " + myUrl);
-
-
         //Background work here
         StringRequest sr = new StringRequest(Request.Method.GET, myUrl, new Response.Listener<String>() {
             @Override
@@ -110,11 +119,6 @@ public class TimeTable extends AppCompatActivity {
         });
         queue.add(sr);
 
-    }
+    }//fim do getUc
 
-    public void seeH() {
-        for (Schedule s : horarios) {
-            Log.d("PRINT", "place:" + s.getProfessorName() + " title: " + s.getClassTitle());
-        }
-    }
 }
