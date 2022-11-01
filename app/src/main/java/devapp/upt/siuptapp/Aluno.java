@@ -2,50 +2,50 @@ package devapp.upt.siuptapp;
 
 public class Aluno  {
 
-    private int alnum;
-    private String alnome;
-    private int alpass;
-    private String altoken;
+    private int alNum;
+    private String alNome;
+    private String alPass;
+    private String alToken;
 
 
-    public Aluno(int alnum, String alnome, int alpass, String altoken) {
-        this.alnum = alnum;
-        this.alnome = alnome;
-        this.alpass = alpass;
-        this.altoken = altoken;
+    public Aluno(int alnum, String alnome, String alpass, String alToken) {
+        this.alNum = alnum;
+        this.alNome = alnome;
+        this.alPass = alpass;
+        this.alToken = alToken;
 
     }
 
-    public int getAlnum() {
-        return alnum;
+    public int getAlNum() {
+        return alNum;
     }
 
-    public void setAlnum(int alnum) {
-        this.alnum = alnum;
+    public void setAlNum(int alNum) {
+        this.alNum = alNum;
     }
 
-    public String getAlnome() {
-        return alnome;
+    public String getAlNome() {
+        return alNome;
     }
 
-    public void setAlnome(String alnome) {
-        this.alnome = alnome;
+    public void setAlNome(String alNome) {
+        this.alNome = alNome;
     }
 
-    public int getAlpass() {
-        return alpass;
+    public String getAlPass() {
+        return alPass;
     }
 
-    public void setAlpass(int alpass) {
-        this.alpass = alpass;
+    public void setAlPass(String alPass) {
+        this.alPass = alPass;
     }
 
-    public String getAltoken() {
-        return altoken;
+    public String getAlToken() {
+        return alToken;
     }
 
-    public void setAltoken(String altoken) {
-        this.altoken = altoken;
+    public void setAlToken(String alToken) {
+        this.alToken = alToken;
     }
 
 
@@ -53,10 +53,10 @@ public class Aluno  {
     @Override
     public String toString() {
         return "Aluno{" +
-                "alnum=" + alnum +
-                ", alnome='" + alnome + '\'' +
-                ", alpass=" + alpass +
-                ", altoken='" + altoken + '\'' +
+                "alnum=" + alNum +
+                ", alnome='" + alNome + '\'' +
+                ", alpass=" + alPass +
+                ", altoken='" + alToken + '\'' +
                 '}';
     }
 }

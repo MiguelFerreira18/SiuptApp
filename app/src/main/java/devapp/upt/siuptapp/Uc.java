@@ -3,21 +3,17 @@ package devapp.upt.siuptapp;
 public class Uc {
     private int codUC;
     private String nome;
-    private String prof;
 
 
-    public Uc(int codUC, String nome, String prof) {
+    public Uc(int codUC, String nome) {
         this.codUC = codUC;
         this.nome = nome;
-        this.prof = prof;
 
     }
 
     public Uc() {
         this.codUC = 0;
         this.nome = "";
-        this.prof = "";
-
     }
 
     public int getCodUC() {
@@ -36,13 +32,12 @@ public class Uc {
         this.nome = nome;
     }
 
-    public String getProf() {
-        return prof;
+
+    @Override
+    public String toString() {
+        return "Uc{" +
+                "codUC=" + codUC +
+                ", nome='" + nome + '\'' +
+                '}';
     }
-
-    public void setProf(String prof) {
-        this.prof = prof;
-    }
-
-
 }

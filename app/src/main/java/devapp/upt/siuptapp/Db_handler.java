@@ -9,7 +9,7 @@ import androidx.annotation.Nullable;
 
 import java.util.ArrayList;
 
-public class Db_handler extends SQLiteOpenHelper {
+public class Db_handler extends SQLiteOpenHelper  {
 
     Context ct;
 
@@ -17,16 +17,18 @@ public class Db_handler extends SQLiteOpenHelper {
     public static final String DB_UC_TABLE = "UC";
     public static final String DB_AL_TABLE = "AL";
     public static final String DB_AL_UC_HORARIO_TABLE = "HOR";
+    public static final String DB_AL_UC_NOTAS_TABLE = "NOTAS";
 
     //TABLE UC
     public static final String UCCOD = "UCCOD";
-    public static final String UCPROF = "UCPROF";
     public static final String UCNOME = "UCNOME";
+
     //TABLE ALUNO
     public static final String ALNUM = "ALNUM";
     public static final String ALNOME = "ALNOME";
     public static final String ALPASS = "ALPASS";
     public static final String ALTOKEN = "ALTOKEN";
+
     //TABLE INTERMEDIA "HORARIO"
     public static final String HORID = "HORID";
     public static final String AL_HOR_NUM = "NUMALUNO";
@@ -36,9 +38,15 @@ public class Db_handler extends SQLiteOpenHelper {
     public static final String HORF = "HORF";
     public static final String HORTIPO = "HORTIPO";
 
-    public static final String DBNAME = "mydatabase";
-    public static final int VERSION = 1;//Alterar este valor sempre que se quiser uma base de dados nova
+    //TABLE INTERMEDIA NOTAS
+    public static final String NOTID = "NOT_ID";
+    public static final String AL_NOT_NUM = "NUMALUNO";
+    public static final String UC_NOT_COD = "CODUC";
+    public static final String NOTA = "NOTA";
 
+    //DATABASE DEFINITIONS
+    public static final String DBNAME = "mydatabase";
+    public static final int VERSION = 16;//Alterar este valor sempre que se quiser uma base de dados nova
 
     //Construtor
     public Db_handler(@Nullable Context context) {
@@ -49,12 +57,14 @@ public class Db_handler extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
 
-        String queryUCTable = String.format("CREATE TABLE %s( %s INTEGER PRIMARY KEY,%s TEXT, %s TEXT)", DB_UC_TABLE, UCCOD, UCPROF, UCNOME);
-        String queryALTable = String.format("CREATE TABLE %s( %s INTEGER PRIMARY KEY,%s TEXT,%s INTEGER,%s TEXT)", DB_AL_TABLE, ALNUM, ALNOME, ALPASS, ALTOKEN);
+        String queryUCTable = String.format("CREATE TABLE %s( %s INTEGER PRIMARY KEY, %s TEXT)", DB_UC_TABLE, UCCOD, UCNOME);
+        String queryALTable = String.format("CREATE TABLE %s( %s INTEGER PRIMARY KEY,%s TEXT,%s Text,%s TEXT)", DB_AL_TABLE, ALNUM, ALNOME, ALPASS, ALTOKEN);
         String queryHorarioTable = String.format("CREATE TABLE %s(%s INTEGER PRIMARY KEY AUTOINCREMENT, %s INTEGER,%s INTEGER,%s TEXT,%s INTEGER,%s INTEGER,%s TEXT, FOREIGN KEY(%s) REFERENCES %s(%s), FOREIGN KEY(%s) REFERENCES %s(%s))", DB_AL_UC_HORARIO_TABLE, HORID, AL_HOR_NUM, UC_HORARIO_COD, HORDIA, HORI, HORF, HORTIPO, AL_HOR_NUM, DB_AL_TABLE, ALNUM, UC_HORARIO_COD, DB_UC_TABLE, UCCOD);
+        String queryNotaTable = String.format("CREATE TABLE %s(%s INTEGER PRIMARY KEY AUTOINCREMENT, %s INTEGER,%s INTEGER,%s INTEGER, FOREIGN KEY(%s) REFERENCES %s(%s), FOREIGN KEY(%s) REFERENCES %s(%s))", DB_AL_UC_NOTAS_TABLE, NOTID, AL_NOT_NUM, UC_NOT_COD, NOTA, AL_NOT_NUM, DB_AL_TABLE, ALNUM, UC_NOT_COD, DB_UC_TABLE, UCCOD);
         sqLiteDatabase.execSQL(queryUCTable);
         sqLiteDatabase.execSQL(queryALTable);
         sqLiteDatabase.execSQL(queryHorarioTable);
+        sqLiteDatabase.execSQL(queryNotaTable);
 
     }
 
@@ -63,21 +73,35 @@ public class Db_handler extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + DB_UC_TABLE);
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + DB_AL_TABLE);
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + DB_AL_UC_HORARIO_TABLE);
+        sqLiteDatabase.execSQL(String.format("DROP TABLE IF EXISTS %s", DB_AL_UC_NOTAS_TABLE));
         onCreate(sqLiteDatabase);
     }
 
     /**
      * adiciona um aluno na base de dados
+     *
      * @param a
      */
     public void addAluno(Aluno a) {
         SQLiteDatabase db = this.getWritableDatabase();
-        String query = String.format("INSERT INTO %s(%s,%s,%s,%s) VALUES('%s','%s','%s','%s');", DB_AL_TABLE, ALNUM, ALNOME, ALPASS, ALTOKEN, a.getAlnum(), a.getAlnome(), a.getAlpass(), a.getAltoken());
+        String query = String.format("INSERT INTO %s(%s,%s,%s,%s) VALUES('%s','%s','%s','%s');", DB_AL_TABLE, ALNUM, ALNOME, ALPASS, ALTOKEN, a.getAlNum(), a.getAlNome(), a.getAlPass(), a.getAlToken());
+        db.execSQL(query);
+    }
+
+    /**
+     * adiciona uma nota na tabela de notas
+     *
+     * @param n
+     */
+    public void addNota(Nota n) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        String query = String.format("INSERT INTO %s(%s,%s,%s) VALUES('%s','%s','%s');", DB_AL_UC_NOTAS_TABLE, AL_NOT_NUM, UC_NOT_COD, NOTA, n.getNumAluno(), n.getCodUC(), n.getNota());
         db.execSQL(query);
     }
 
     /**
      * adiciona um novo horario na base de dados
+     *
      * @param h
      */
     public void addHorario(Horario h) {
@@ -88,12 +112,36 @@ public class Db_handler extends SQLiteOpenHelper {
 
     /**
      * adiciona uma nova uc na base dados
+     *
      * @param c
      */
     public void addUc(Uc c) {
         SQLiteDatabase db = this.getWritableDatabase();
-        String query = String.format("INSERT INTO %s(%s,%s,%s) VALUES('%s','%s','%s');", DB_UC_TABLE, UCCOD, UCPROF, UCNOME, c.getCodUC(), c.getProf(), c.getNome());
+        String query = String.format("INSERT INTO %s(%s,%s) VALUES('%s','%s');", DB_UC_TABLE, UCCOD, UCNOME, c.getCodUC(), c.getNome());
         db.execSQL(query);
+    }
+
+    public Boolean getAluno(String token) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String query = String.format("SELECT * FROM %s WHERE %s = '%s'", DB_AL_TABLE, ALTOKEN, token);
+        Cursor cursor = db.rawQuery(query, null);
+        if (cursor.getCount() > 0) {
+
+            return true;
+        }
+        return false;
+
+    }
+
+    public Uc getUc(int ucCod) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String query = String.format("SELECT * FROM %s WHERE %s = %s", DB_UC_TABLE, UCCOD, ucCod);
+        Cursor cursor = db.rawQuery(query, null);
+        if (cursor.moveToFirst()) {
+            Uc uc = new Uc(cursor.getInt(0), cursor.getString(1));
+            return uc;
+        }
+        return null;
     }
 
     /**
@@ -112,12 +160,30 @@ public class Db_handler extends SQLiteOpenHelper {
             do {
                 Uc u = new Uc();
                 u.setCodUC(cursor.getInt(0));
-                u.setProf(cursor.getString(1));
                 u.setNome(cursor.getString(2));
                 ucs.add(u);
             } while (cursor.moveToNext());
         }
         return ucs;
+    }
+
+
+    public ArrayList<Nota> getNotas(String token) {
+        ArrayList<Nota> notas = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+        int alNum = checkToken(token);
+        String query = String.format("Select * FROM %s,%s WHERE %s = %s", DB_UC_TABLE, DB_AL_UC_NOTAS_TABLE, alNum, AL_NOT_NUM);
+        Cursor cursor = db.rawQuery(query, null);
+        if (cursor.moveToFirst()) {
+            do {
+                Nota n = new Nota();
+                n.setNumAluno(cursor.getInt(1));
+                n.setCodUC(cursor.getInt(2));
+                n.setNota(cursor.getInt(3));
+                notas.add(n);
+            } while (cursor.moveToNext());
+        }
+        return notas;
     }
 
     /**
@@ -148,21 +214,6 @@ public class Db_handler extends SQLiteOpenHelper {
     }
 
 
-    //devolve o id do Aluno dado um token
-    public int checkToken(String token) {
-        SQLiteDatabase db = this.getReadableDatabase();
-        String query = String.format("SELECT * FROM %s WHERE %s = '%s'", DB_AL_TABLE, ALTOKEN, token);
-        Cursor cursor = db.rawQuery(query, null);
-        if (cursor.moveToFirst()) {
-            //get numAluno with token
-            int alnum = cursor.getInt(0);
-            //get ucs with numAluno
-            return alnum;
-        } else {
-            return -1;
-        }
-    }
-
     /**
      * Verifica se o numero do aluno e a password são iguais e devolve um token
      *
@@ -185,6 +236,56 @@ public class Db_handler extends SQLiteOpenHelper {
             }
         }
         return null;
+    }
+
+    /**
+     * devolve um id dado um token
+     * @param token
+     * @return
+     */
+    public int checkToken(String token) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String query = String.format("SELECT * FROM %s WHERE %s = '%s'", DB_AL_TABLE, ALTOKEN, token);
+        Cursor cursor = db.rawQuery(query, null);
+        if (cursor.moveToFirst()) {
+            //get numAluno with token
+            int alnum = cursor.getInt(0);
+            //get ucs with numAluno
+            return alnum;
+        } else {
+            return -1;
+        }
+    }
+
+    //check if  horarios table is empty
+    public boolean checkHorariosTable() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String query = String.format("SELECT * FROM %s", DB_AL_UC_HORARIO_TABLE);
+        Cursor cursor = db.rawQuery(query, null);
+        return cursor.getCount() == 0;
+    }
+
+    //check if ucs table is empty
+    public boolean checkUcsTable() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String query = String.format("SELECT * FROM %s", DB_UC_TABLE);
+        Cursor cursor = db.rawQuery(query, null);
+        return cursor.getCount() == 0;
+    }
+
+    //check if aluno table is empty
+    public boolean checkAlunoTable() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String query = String.format("SELECT * FROM %s", DB_AL_TABLE);
+        Cursor cursor = db.rawQuery(query, null);
+        return cursor.getCount() == 0;
+    }
+
+    public boolean checkHorarioAlunoTable() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String query = String.format("SELECT * FROM %s", DB_AL_UC_HORARIO_TABLE);
+        Cursor cursor = db.rawQuery(query, null);
+        return cursor.getCount() == 0;
     }
 
 }
