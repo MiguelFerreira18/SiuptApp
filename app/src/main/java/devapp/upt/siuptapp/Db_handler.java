@@ -177,7 +177,7 @@ public class Db_handler extends SQLiteOpenHelper {
         ArrayList<Nota> notas = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
         int alNum = checkToken(token);
-        String query = String.format("Select * FROM %s,%s WHERE %s = %s", DB_AL_UC_NOTAS_TABLE, DB_UC_TABLE, DB_AL_UC_NOTAS_TABLE, alNum, AL_NOT_NUM);
+        String query = String.format("Select * FROM %s WHERE %s = %s",  DB_AL_UC_NOTAS_TABLE, alNum, AL_NOT_NUM);
         Cursor cursor = db.rawQuery(query, null);
         if (cursor.moveToFirst()) {
             do {
