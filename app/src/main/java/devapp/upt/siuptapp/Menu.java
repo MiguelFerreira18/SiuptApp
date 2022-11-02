@@ -6,7 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 
 public class Menu extends AppCompatActivity {
-public static String tokenS = "token";
+public static final String tokenS = "token";
 Intent i;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
