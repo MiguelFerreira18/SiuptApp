@@ -9,4 +9,12 @@
         <item>quinta</item>
         <item>Sexta</item>
     </string-array>
+
+    <string name="login">Insira os seus dados de Login</string>
+    <string name="numero">Número</string>
+    <string name="Hintnumero">Insira o seu número de utilizador</string>
+    <string name="passe">Palavra-Passe</string>
+    <string name="Hintpasse">Insira a sua palavra-passe</string>
+    <string name="loginB">Login</string>
+
 </resources>

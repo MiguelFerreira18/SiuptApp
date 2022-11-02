@@ -235,7 +235,7 @@ public class Db_handler extends SQLiteOpenHelper  {
                 }
             }
         }
-        return null;
+        return "";
     }
 
     /**
@@ -279,6 +279,7 @@ public class Db_handler extends SQLiteOpenHelper  {
         String query = String.format("SELECT * FROM %s", DB_AL_TABLE);
         Cursor cursor = db.rawQuery(query, null);
         return cursor.getCount() == 0;
+
     }
 
     public boolean checkHorarioAlunoTable() {
