@@ -17,4 +17,6 @@
     <string name="Hintpasse">Insira a sua palavra-passe</string>
     <string name="loginB">Login</string>
 
+    <string name="nextActivity">Próxima Actividade</string>
+
 </resources>
