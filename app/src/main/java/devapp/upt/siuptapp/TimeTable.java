@@ -46,13 +46,12 @@ public class TimeTable extends AppCompatActivity {
         i = getIntent();
         token = i.getStringExtra(Menu.tokenS);
         db = new Db_handler(this.getApplicationContext());
-        /*if(connected){
-        getHorario();
-        }else {*/
+        if (connected) {
+            getHorario();
+        } else {
             getHorarioBd();
-//        }
+        }
     }
-
 
 
     /**
@@ -132,11 +131,11 @@ public class TimeTable extends AppCompatActivity {
         queue.add(sr);
     }//fim do getUc
 
-    public void getHorarioBd(){
+    public void getHorarioBd() {
         Log.d("entrou", "getHorarioBd: inicio do horario");
-        token = token.replace("\n","");
+        token = token.replace("\n", "");
         ArrayList<Horario> myHorarios = db.getHorarioAluno(token);
-        for (Horario h: myHorarios) {
+        for (Horario h : myHorarios) {
             Schedule s = new Schedule();
             s.setClassTitle(db.getUc(h.getCodUC()).getNome());
             s.setProfessorName(h.getTipo());
@@ -147,6 +146,6 @@ public class TimeTable extends AppCompatActivity {
             Log.d("o meu horario", s.getDay() + "  cenas " + h.getDia());
             myTimeTable.add(horarios);
         }
-        Log.d("a minha time table", myTimeTable.getAllSchedulesInStickers().size() +"");
+        Log.d("a minha time table", myTimeTable.getAllSchedulesInStickers().size() + "");
     }
 }
