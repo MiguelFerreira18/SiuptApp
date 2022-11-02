@@ -8,6 +8,7 @@ import android.net.NetworkCapabilities;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -30,13 +31,23 @@ public class MainActivity extends AppCompatActivity {
     String token, myUc;
     Db_handler db;
 
+    TextView numero;
+    TextView nome;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        numero = findViewById(R.id.editTextTextPersonName);
+        nome = findViewById(R.id.editTextTextPersonName2);
     }
 
+    public void login(View v)
+    {
+
+    }
 
 
 
