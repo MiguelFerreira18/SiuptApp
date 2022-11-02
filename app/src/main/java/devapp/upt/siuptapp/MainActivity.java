@@ -46,6 +46,14 @@ public class MainActivity extends AppCompatActivity {
 
     public void login(View v)
     {
+        String myUrl = "http://alunos.upt.pt/~abilioc/dam.php?func=auth&login=123&password=123asd" + token;
+        if(isConnected())
+        {
+
+        }else
+        {
+
+        }
 
     }
 
