@@ -46,7 +46,7 @@ public class Db_handler extends SQLiteOpenHelper {
 
     //DATABASE DEFINITIONS
     public static final String DBNAME = "mydatabase";
-    public static final int VERSION = 16;//Alterar este valor sempre que se quiser uma base de dados nova
+    public static final int VERSION = 1;//Alterar este valor sempre que se quiser uma base de dados nova
 
     //Construtor
     public Db_handler(@Nullable Context context) {
@@ -121,9 +121,12 @@ public class Db_handler extends SQLiteOpenHelper {
      */
     public void addUc(Uc c) {
         SQLiteDatabase db = this.getWritableDatabase();
+        if(checkForOneUc(c.getCodUC())){
         String query = String.format("INSERT INTO %s(%s,%s) VALUES('%s','%s');", DB_UC_TABLE, UCCOD, UCNOME, c.getCodUC(), c.getNome());
         db.execSQL(query);
+        }
     }
+
     /**
      * devolve uma uc dado um id
      * está correta
@@ -177,7 +180,7 @@ public class Db_handler extends SQLiteOpenHelper {
         ArrayList<Nota> notas = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
         int alNum = checkToken(token);
-        String query = String.format("Select * FROM %s WHERE %s = %s",  DB_AL_UC_NOTAS_TABLE, alNum, AL_NOT_NUM);
+        String query = String.format("Select * FROM %s WHERE %s = %s", DB_AL_UC_NOTAS_TABLE, alNum, AL_NOT_NUM);
         Cursor cursor = db.rawQuery(query, null);
         if (cursor.moveToFirst()) {
             do {
@@ -223,6 +226,7 @@ public class Db_handler extends SQLiteOpenHelper {
     /**
      * Verifica se o numero do aluno e a password são iguais e devolve um token
      * Funciona
+     *
      * @param nome
      * @param pass
      * @return
@@ -247,6 +251,7 @@ public class Db_handler extends SQLiteOpenHelper {
     /**
      * devolve um id dado um token
      * Funciona
+     *
      * @param token
      * @return
      */
@@ -262,6 +267,13 @@ public class Db_handler extends SQLiteOpenHelper {
         } else {
             return -1;
         }
+    }
+
+    public boolean checkForOneUc(int codUC) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String query = String.format("SELECT * FROM %s WHERE %s = %s", DB_UC_TABLE,UCCOD,codUC);
+        Cursor cursor = db.rawQuery(query, null);
+        return cursor.getCount() == 0;
     }
 
     //check if  horarios table is empty

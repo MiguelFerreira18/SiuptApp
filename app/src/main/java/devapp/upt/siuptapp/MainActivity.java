@@ -50,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
         db = new Db_handler(this);
         c = findViewById(R.id.myClick);
         num = findViewById(R.id.editTextTextPersonName);
-        p= findViewById(R.id.editTextTextPersonName2);
+        p = findViewById(R.id.editTextTextPersonName2);
 
 
         c.setOnClickListener(this::login);
@@ -66,8 +66,7 @@ public class MainActivity extends AppCompatActivity {
             queue = Volley.newRequestQueue(MainActivity.this);
             StringRequest sr = new StringRequest(Request.Method.GET, myUrl, new Response.Listener<String>() {
                 @Override
-                public void onResponse(String response)
-                {
+                public void onResponse(String response) {
                     token = response;
                     String check = db.authCheck(numero, password);
                     if (check.equalsIgnoreCase(""))//Se não existir na base de dados
@@ -75,11 +74,10 @@ public class MainActivity extends AppCompatActivity {
                         addToDataBase(Integer.parseInt(numero), password, token);
                     }
 
-                    Intent i = new Intent(MainActivity.this,Menu.class);
-                    i.putExtra(tokenA,check);
+                    Intent i = new Intent(MainActivity.this, Menu.class);
+
+                    i.putExtra(tokenA, check);
                     startActivity(i);
-
-
 
                 }
             }, new Response.ErrorListener() {
@@ -89,26 +87,17 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
             queue.add(sr);
-        }else//Se não houver acesso à internet
+        } else//Se não houver acesso à internet
         {
             String check = db.authCheck(numero, password);
-            if (check != null)
-            {
-                Intent i = new Intent(this,Menu.class);
-                i.putExtra(tokenA,check);
+            if (check != null) {
+                Intent i = new Intent(this, Menu.class);
+                i.putExtra(tokenA, check);
                 startActivity(i);
             }
 
         }
     }
-        
-
-
-
-
-
-
-
 
 
     //**********************************************************************************************************************
@@ -120,6 +109,7 @@ public class MainActivity extends AppCompatActivity {
 
     /**
      * verifica se existe uma conexão com a internet/wifi
+     *
      * @return
      */
     public boolean isConnected() {
@@ -145,6 +135,7 @@ public class MainActivity extends AppCompatActivity {
     /**
      * adiciona valores na base de dados dado os dados de um aluno
      * só acontece uma vez por aluno novo
+     *
      * @param number
      * @param password
      * @param token
@@ -155,7 +146,7 @@ public class MainActivity extends AppCompatActivity {
         //adiciona as ucs
         addUcs();
         //adiciona os horarios
-        addHorario();
+        addHorario(number);
         //adiciona as notas
         addNotas();
 
@@ -163,6 +154,7 @@ public class MainActivity extends AppCompatActivity {
 
     /**
      * adiciona um aluno à base de dados
+     *
      * @param a
      */
     private void addAluno(Aluno a) {
@@ -217,10 +209,9 @@ public class MainActivity extends AppCompatActivity {
     /**
      * adiciona os horario de um aluno à base de dados
      */
-    private void addHorario() {
+    private void addHorario(int alNum) {
         queue = Volley.newRequestQueue(MainActivity.this);
         String myUrl = "https://alunos.upt.pt/~abilioc/dam.php?func=horario&token=" + token;
-
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, myUrl, null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
@@ -229,13 +220,24 @@ public class MainActivity extends AppCompatActivity {
                     Toast.makeText(MainActivity.this, " " + myArray, Toast.LENGTH_LONG).show();
                     for (int i = 0; i < myArray.length(); i++) {
                         JSONObject jo = myArray.getJSONObject(i);
-                        Horario s = new Horario();
-                        s.setCodUC(jo.getInt("codigoUC"));
-                        s.setTipo(jo.getString("tipoAula"));
-                        s.setHoraInicio(jo.getInt("horaInicio"));
-                        s.setHoraFim(jo.getInt("horaFim"));
-                        s.setDia(jo.getInt("diaSemana") - 2);
-                        db.addHorario(s);
+                        getUc(jo.getInt("codigoUC"), new ICallBack() {
+                            @Override
+                            public void onSuccess(String uc) {
+                                try {
+                                    Horario s = new Horario();
+                                    db.addUc(new Uc(jo.getInt("codigoUC"), uc));
+                                    s.setCodUC(jo.getInt("codigoUC"));
+                                    s.setTipo(jo.getString("tipoAula"));
+                                    s.setNumAluno(alNum);
+                                    s.setHoraInicio(jo.getInt("horaInicio"));
+                                    s.setHoraFim(jo.getInt("horaFim"));
+                                    s.setDia(jo.getInt("diaSemana") - 2);
+                                    db.addHorario(s);
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        });
 
                     }
                 } catch (JSONException e) {
@@ -289,6 +291,7 @@ public class MainActivity extends AppCompatActivity {
 
     /**
      * devolve o nome da uc dado o seu codigo
+     *
      * @param uc
      * @param callback
      */
