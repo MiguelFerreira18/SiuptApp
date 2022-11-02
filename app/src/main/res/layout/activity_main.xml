@@ -41,8 +41,7 @@
                     app:layout_constraintBottom_toTopOf="@+id/imageView2"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    />
+                    app:layout_constraintTop_toTopOf="parent" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <TextView
@@ -61,17 +60,17 @@
                 android:id="@+id/editTextTextPersonName"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:ems="10"
-                android:hint="Insira o seu número"
-                android:inputType="textPersonName"
-                android:textColorHint="#404040"
-                android:text=""
-                android:paddingStart="32dp"
                 android:layout_marginStart="32dp"
                 android:layout_marginTop="32dp"
                 android:layout_marginEnd="16dp"
-                android:textSize="16sp"
-                android:background="@drawable/backgroud_edittext"/>
+                android:background="@drawable/backgroud_edittext"
+                android:ems="10"
+                android:hint="Insira o seu número"
+                android:inputType="textPersonName"
+                android:paddingStart="32dp"
+                android:text=""
+                android:textColorHint="#404040"
+                android:textSize="16sp" />
 
             <TextView
                 android:id="@+id/textView3"
@@ -94,7 +93,7 @@
                 android:layout_marginEnd="16dp"
                 android:background="@drawable/backgroud_edittext"
                 android:ems="10"
-                android:hint="Insira o seu número"
+                android:hint="@string/Hintpasse"
                 android:inputType="textPassword"
                 android:paddingStart="32dp"
                 android:text=""
@@ -109,7 +108,7 @@
                 android:layout_marginEnd="16dp"
                 android:background="@drawable/btn_amarelo"
                 android:elevation="3dp"
-                android:onClick="login">
+                android:id="@+id/myClick">
 
                 <TextView
                     android:id="@+id/textView4"

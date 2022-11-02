@@ -1,8 +1,10 @@
 package devapp.upt.siuptapp;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkCapabilities;
 import android.os.Bundle;
@@ -31,31 +33,77 @@ public class MainActivity extends AppCompatActivity {
     String token, myUc;
     Db_handler db;
 
-    TextView numero;
-    TextView nome;
+    TextView num;
+    TextView p;
+    String numero;
+    String password;
 
+    ConstraintLayout c;
+
+    public static final String tokenA = "token";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        numero = findViewById(R.id.editTextTextPersonName);
-        nome = findViewById(R.id.editTextTextPersonName2);
+        db = new Db_handler(this);
+        c = findViewById(R.id.myClick);
+        num = findViewById(R.id.editTextTextPersonName);
+        p= findViewById(R.id.editTextTextPersonName2);
+
+
+        c.setOnClickListener(this::login);
     }
 
-    public void login(View v)
-    {
-        String myUrl = "http://alunos.upt.pt/~abilioc/dam.php?func=auth&login=123&password=123asd" + token;
-        if(isConnected())
-        {
+    public void login(View v) {
+        numero = num.getText().toString();
+        password = p.getText().toString();
+        System.out.println("login");
+        if (isConnected()) {
+            System.out.println("conectado");
+            String myUrl = "https://alunos.upt.pt/~abilioc/dam.php?func=auth&login=" + numero + "&password=" + password;
+            queue = Volley.newRequestQueue(MainActivity.this);
+            StringRequest sr = new StringRequest(Request.Method.GET, myUrl, new Response.Listener<String>() {
+                @Override
+                public void onResponse(String response)
+                {
+                    token = response;
+                    String check = db.authCheck(numero, password);
+                    if (check.equalsIgnoreCase(""))//Se não existir na base de dados
+                    {
+                        addToDataBase(Integer.parseInt(numero), password, token);
+                    }
 
-        }else
+                    Intent i = new Intent(MainActivity.this,Menu.class);
+                    i.putExtra(tokenA,check);
+                    startActivity(i);
+
+
+
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    Toast.makeText(MainActivity.this, "Número ou Palavra-Passe incorreta", Toast.LENGTH_SHORT).show();
+                }
+            });
+            queue.add(sr);
+        }else//Se não houver acesso à internet
         {
+            String check = db.authCheck(numero, password);
+            if (check != null)
+            {
+                Intent i = new Intent(this,Menu.class);
+                i.putExtra(tokenA,check);
+                startActivity(i);
+            }
 
         }
-
     }
+        
+
+
 
 
 
