@@ -9,7 +9,7 @@ import androidx.annotation.Nullable;
 
 import java.util.ArrayList;
 
-public class Db_handler extends SQLiteOpenHelper  {
+public class Db_handler extends SQLiteOpenHelper {
 
     Context ct;
 
@@ -46,7 +46,11 @@ public class Db_handler extends SQLiteOpenHelper  {
 
     //DATABASE DEFINITIONS
     public static final String DBNAME = "mydatabase";
-    public static final int VERSION = 17;//Alterar este valor sempre que se quiser uma base de dados nova
+
+   
+
+    public static final int VERSION = 1;//Alterar este valor sempre que se quiser uma base de dados nova
+
 
     //Construtor
     public Db_handler(@Nullable Context context) {
@@ -79,6 +83,7 @@ public class Db_handler extends SQLiteOpenHelper  {
 
     /**
      * adiciona um aluno na base de dados
+     * funciona
      *
      * @param a
      */
@@ -90,6 +95,7 @@ public class Db_handler extends SQLiteOpenHelper  {
 
     /**
      * adiciona uma nota na tabela de notas
+     * funciona
      *
      * @param n
      */
@@ -101,6 +107,7 @@ public class Db_handler extends SQLiteOpenHelper  {
 
     /**
      * adiciona um novo horario na base de dados
+     * funciona
      *
      * @param h
      */
@@ -112,27 +119,25 @@ public class Db_handler extends SQLiteOpenHelper  {
 
     /**
      * adiciona uma nova uc na base dados
+     * funciona
      *
      * @param c
      */
     public void addUc(Uc c) {
         SQLiteDatabase db = this.getWritableDatabase();
+        if(checkForOneUc(c.getCodUC())){
         String query = String.format("INSERT INTO %s(%s,%s) VALUES('%s','%s');", DB_UC_TABLE, UCCOD, UCNOME, c.getCodUC(), c.getNome());
         db.execSQL(query);
-    }
-
-    public Boolean getAluno(String token) {
-        SQLiteDatabase db = this.getReadableDatabase();
-        String query = String.format("SELECT * FROM %s WHERE %s = '%s'", DB_AL_TABLE, ALTOKEN, token);
-        Cursor cursor = db.rawQuery(query, null);
-        if (cursor.getCount() > 0) {
-
-            return true;
         }
-        return false;
-
     }
 
+    /**
+     * devolve uma uc dado um id
+     * está correta
+     *
+     * @param ucCod
+     * @return
+     */
     public Uc getUc(int ucCod) {
         SQLiteDatabase db = this.getReadableDatabase();
         String query = String.format("SELECT * FROM %s WHERE %s = %s", DB_UC_TABLE, UCCOD, ucCod);
@@ -146,6 +151,7 @@ public class Db_handler extends SQLiteOpenHelper  {
 
     /**
      * devolve as ucs do aluno
+     * Funciona
      *
      * @param tokenAl
      * @return
@@ -154,7 +160,7 @@ public class Db_handler extends SQLiteOpenHelper  {
         ArrayList<Uc> ucs = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
         int alNum = checkToken(tokenAl);
-        String query = String.format("Select %s FROM %s,%s WHERE %s = %s AND %s = %s", UCNOME, DB_UC_TABLE, DB_AL_TABLE, DB_AL_UC_HORARIO_TABLE, alNum, UCCOD, UC_HORARIO_COD);
+        String query = String.format("Select * FROM %s,%s WHERE %s = %s AND %s = %s", DB_UC_TABLE, DB_AL_UC_HORARIO_TABLE, alNum, AL_HOR_NUM, UC_HORARIO_COD, UCCOD);
         Cursor cursor = db.rawQuery(query, null);
         if (cursor.moveToFirst()) {
             do {
@@ -167,12 +173,18 @@ public class Db_handler extends SQLiteOpenHelper  {
         return ucs;
     }
 
-
+    /**
+     * Devolve um arraylist de notas de um dado aluno
+     * está correta
+     *
+     * @param token
+     * @return
+     */
     public ArrayList<Nota> getNotas(String token) {
         ArrayList<Nota> notas = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
         int alNum = checkToken(token);
-        String query = String.format("Select * FROM %s,%s WHERE %s = %s", DB_UC_TABLE, DB_AL_UC_NOTAS_TABLE, alNum, AL_NOT_NUM);
+        String query = String.format("Select * FROM %s WHERE %s = %s", DB_AL_UC_NOTAS_TABLE, alNum, AL_NOT_NUM);
         Cursor cursor = db.rawQuery(query, null);
         if (cursor.moveToFirst()) {
             do {
@@ -188,6 +200,7 @@ public class Db_handler extends SQLiteOpenHelper  {
 
     /**
      * devolve o horario do aluno
+     * Funciona
      *
      * @param tokenAl
      * @return
@@ -196,7 +209,7 @@ public class Db_handler extends SQLiteOpenHelper  {
         ArrayList<Horario> ucs = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
         int alNum = checkToken(tokenAl);
-        String query = String.format("SELECT %s.* FROM %s,%s WHERE %s = %s AND %s = %s", DB_AL_UC_HORARIO_TABLE, DB_UC_TABLE, DB_AL_UC_HORARIO_TABLE, AL_HOR_NUM, alNum, UCCOD, UC_HORARIO_COD);
+        String query = String.format("SELECT * FROM %s WHERE %s = %s ", DB_AL_UC_HORARIO_TABLE, AL_HOR_NUM, alNum);
         Cursor cursor = db.rawQuery(query, null);
         if (cursor.moveToFirst()) {
             do {
@@ -216,6 +229,7 @@ public class Db_handler extends SQLiteOpenHelper  {
 
     /**
      * Verifica se o numero do aluno e a password são iguais e devolve um token
+     * Funciona
      *
      * @param nome
      * @param pass
@@ -240,6 +254,8 @@ public class Db_handler extends SQLiteOpenHelper  {
 
     /**
      * devolve um id dado um token
+     * Funciona
+     *
      * @param token
      * @return
      */
@@ -255,6 +271,13 @@ public class Db_handler extends SQLiteOpenHelper  {
         } else {
             return -1;
         }
+    }
+
+    public boolean checkForOneUc(int codUC) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String query = String.format("SELECT * FROM %s WHERE %s = %s", DB_UC_TABLE,UCCOD,codUC);
+        Cursor cursor = db.rawQuery(query, null);
+        return cursor.getCount() == 0;
     }
 
     //check if  horarios table is empty
