@@ -59,26 +59,27 @@ public class MainActivity extends AppCompatActivity {
     public void login(View v) {
         numero = num.getText().toString();
         password = p.getText().toString();
-        System.out.println("login");
         if (isConnected()) {
-            System.out.println("conectado");
             String myUrl = "https://alunos.upt.pt/~abilioc/dam.php?func=auth&login=" + numero + "&password=" + password;
             queue = Volley.newRequestQueue(MainActivity.this);
             StringRequest sr = new StringRequest(Request.Method.GET, myUrl, new Response.Listener<String>() {
                 @Override
                 public void onResponse(String response) {
                     token = response;
+                    token = token.replace("\n","");
                     String check = db.authCheck(numero, password);
+                    check = check.replace("\n","");
                     if (check.equalsIgnoreCase(""))//Se não existir na base de dados
                     {
                         addToDataBase(Integer.parseInt(numero), password, token);
                     }
 
-                    Intent i = new Intent(MainActivity.this, Menu.class);
 
-                    i.putExtra(tokenA, check);
+                    Intent i = new Intent(MainActivity.this,Menu.class);
+                    i.putExtra(tokenA,token);
                     startActivity(i);
 
+          
                 }
             }, new Response.ErrorListener() {
                 @Override
