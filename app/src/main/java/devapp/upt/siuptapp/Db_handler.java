@@ -46,7 +46,7 @@ public class Db_handler extends SQLiteOpenHelper  {
 
     //DATABASE DEFINITIONS
     public static final String DBNAME = "mydatabase";
-    public static final int VERSION = 16;//Alterar este valor sempre que se quiser uma base de dados nova
+    public static final int VERSION = 17;//Alterar este valor sempre que se quiser uma base de dados nova
 
     //Construtor
     public Db_handler(@Nullable Context context) {
