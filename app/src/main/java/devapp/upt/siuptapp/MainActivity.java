@@ -292,7 +292,7 @@ public class MainActivity extends AppCompatActivity {
      * @param uc
      * @param callback
      */
-    private void getUc(int uc, final ICallBack callback) {
+    public void getUc(int uc, final ICallBack callback) {
 
         String myUrl = "https://alunos.upt.pt/~abilioc/dam.php?func=uc&codigo=" + uc;
         Log.d("cenas", "getUc: " + myUrl);
@@ -313,6 +313,4 @@ public class MainActivity extends AppCompatActivity {
         });
         queue.add(sr);
     }
-
-
 }

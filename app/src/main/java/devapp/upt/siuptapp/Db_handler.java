@@ -295,5 +295,4 @@ public class Db_handler extends SQLiteOpenHelper {
         Cursor cursor = db.rawQuery(query, null);
         return cursor.getCount() == 0;
     }
-
 }
