@@ -66,24 +66,28 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void onResponse(String response) {
                     token = response;
-                    token = token.replace("\n","");
-                    String check = db.authCheck(numero, password);
-                    check = check.replace("\n","");
-                    if (check.equalsIgnoreCase(""))//Se não existir na base de dados
+                    token = token.replace("\n", "").trim();
+                    if(token.equals("false"))
                     {
-                        addToDataBase(Integer.parseInt(numero), password, token);
+                        Toast.makeText(MainActivity.this, "Número ou Palavra-Passe incorreta", Toast.LENGTH_SHORT).show();
+                    }else {
+                        String check = db.authCheck(numero, password);
+                        check = check.replace("\n", "");
+                        if (check.equalsIgnoreCase(""))//Se não existir na base de dados
+                        {
+                            addToDataBase(Integer.parseInt(numero), password, token);
+                        }
+
+
+                        Intent i = new Intent(MainActivity.this, Menu.class);
+                        i.putExtra(tokenA, token);
+                        startActivity(i);
                     }
-
-
-                    Intent i = new Intent(MainActivity.this,Menu.class);
-                    i.putExtra(tokenA,token);
-                    startActivity(i);
-
-          
                 }
             }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
+                    System.out.println("-----errorresponse");
                     Toast.makeText(MainActivity.this, "Número ou Palavra-Passe incorreta", Toast.LENGTH_SHORT).show();
                 }
             });
