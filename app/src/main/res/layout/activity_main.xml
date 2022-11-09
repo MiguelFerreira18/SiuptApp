@@ -9,7 +9,9 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:ignore="SpeakableTextPresentCheck">
+        tools:ignore="SpeakableTextPresentCheck"
+        tools:layout_editor_absoluteX="96dp"
+        tools:layout_editor_absoluteY="-49dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -25,6 +27,7 @@
                     android:id="@+id/imageView2"
                     android:layout_width="269dp"
                     android:layout_height="187dp"
+                    android:scaleType="fitXY"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.496"
@@ -101,14 +104,14 @@
                 android:textSize="16sp" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/myClick"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:layout_marginStart="32dp"
                 android:layout_marginTop="32dp"
                 android:layout_marginEnd="16dp"
                 android:background="@drawable/btn_amarelo"
-                android:elevation="3dp"
-                android:id="@+id/myClick">
+                android:elevation="3dp">
 
                 <TextView
                     android:id="@+id/textView4"
