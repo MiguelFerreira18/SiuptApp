@@ -2,10 +2,7 @@ package devapp.upt.siuptapp;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Context;
 import android.content.Intent;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
@@ -26,11 +23,13 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class TimeTable extends AppCompatActivity {
     Intent i;
-    String token, myUc;
-    ArrayList<Schedule> horarios;
+    String token;
+
+    List<ArrayList<Schedule>> disciplinas;
     TimetableView myTimeTable;
     RequestQueue queue;
     Db_handler db;
@@ -40,12 +39,7 @@ public class TimeTable extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_time_table);
-
-        horarios = new ArrayList<>();
-        myTimeTable = findViewById(R.id.myTimeTable);
-        i = getIntent();
-        token = i.getStringExtra(Menu.tokenS);
-        db = new Db_handler(this.getApplicationContext());
+        inicializables();
         if (connected) {
             getHorario();
         } else {
@@ -55,12 +49,24 @@ public class TimeTable extends AppCompatActivity {
 
 
     /**
+     *
+     */
+    private void inicializables() {
+        disciplinas = new ArrayList<>();
+
+        myTimeTable = findViewById(R.id.myTimeTable);
+        i = getIntent();
+        token = i.getStringExtra(Menu.tokenS);
+        db = new Db_handler(this.getApplicationContext());
+    }
+
+    /**
      * arranja o horario do aluno  pelo webservice
      */
     public void getHorario() {
         queue = Volley.newRequestQueue(TimeTable.this);
         String myUrl = "https://alunos.upt.pt/~abilioc/dam.php?func=horario&token=" + token;
-        Toast.makeText(TimeTable.this, myUrl, Toast.LENGTH_SHORT).show();
+        // Toast.makeText(TimeTable.this, myUrl, Toast.LENGTH_SHORT).show();
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, myUrl, null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
@@ -69,25 +75,32 @@ public class TimeTable extends AppCompatActivity {
                     Toast.makeText(TimeTable.this, " " + myArray, Toast.LENGTH_LONG).show();
                     for (int i = 0; i < myArray.length(); i++) {
                         JSONObject jo = myArray.getJSONObject(i);
-                        Schedule s = new Schedule();
                         getUc(jo.getInt("codigoUC"), new ICallBack() {
                             @Override
                             public void onSuccess(String uc) {
                                 try {
-                                    JSONArray myArray = response.getJSONArray("horario");
-
-                                    myUc = uc;
-                                    s.setClassTitle(myUc);
-                                    s.setProfessorName(jo.getString("tipoAula"));
-                                    s.setStartTime(new Time(jo.getInt("horaInicio"), 0));
-                                    s.setEndTime(new Time(jo.getInt("horaFim"), 0));
-                                    s.setDay(jo.getInt("diaSemana") - 2);
-                                    horarios.add(s);
-                                    myTimeTable.add(horarios);
-                                    Toast.makeText(TimeTable.this, " " + horarios, Toast.LENGTH_SHORT).show();
+                                    if (disciplinas.size() == 0) {
+                                        ArrayList<Schedule> l = new ArrayList<>();
+                                        disciplinas.add(l);
+                                        disciplinas.get(0).add(getScheduleWeb(uc, jo.getString("tipoAula"), new Time(jo.getInt("horaInicio"), 0), new Time(jo.getInt("horaFim"), 0), jo.getInt("diaSemana") - 2));
+                                    } else {
+                                        Boolean hasFound = false;
+                                        for (int j = 0; j < disciplinas.size(); j++) {
+                                            if (uc.equals(disciplinas.get(j).get(0).getClassTitle())) {
+                                                disciplinas.get(j).add(getScheduleWeb(uc, jo.getString("tipoAula"), new Time(jo.getInt("horaInicio"), 0), new Time(jo.getInt("horaFim"), 0), jo.getInt("diaSemana") - 2));
+                                                hasFound = true;
+                                            }
+                                        }
+                                        if (!hasFound) {
+                                            ArrayList<Schedule> l = new ArrayList<>();
+                                            disciplinas.add(l);
+                                            disciplinas.get(disciplinas.size() - 1).add(getScheduleWeb(uc, jo.getString("tipoAula"), new Time(jo.getInt("horaInicio"), 0), new Time(jo.getInt("horaFim"), 0), jo.getInt("diaSemana") - 2));
+                                        }
+                                    }
                                 } catch (JSONException e) {
                                     e.printStackTrace();
                                 }
+                                iterateDisciplina();
                             }
                         });
                     }
@@ -117,7 +130,6 @@ public class TimeTable extends AppCompatActivity {
         StringRequest sr = new StringRequest(Request.Method.GET, myUrl, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                myUc = response;
                 Toast.makeText(TimeTable.this, "done", Toast.LENGTH_SHORT).show();
                 callback.onSuccess(response);
             }
@@ -125,27 +137,72 @@ public class TimeTable extends AppCompatActivity {
             @Override
             public void onErrorResponse(VolleyError error) {
                 Toast.makeText(TimeTable.this, "Erro" + error, Toast.LENGTH_SHORT).show();
-                myUc = null;
+
             }
         });
         queue.add(sr);
     }//fim do getUc
 
+    /**
+     *
+     */
     public void getHorarioBd() {
         Log.d("entrou", "getHorarioBd: inicio do horario");
         token = token.replace("\n", "");
         ArrayList<Horario> myHorarios = db.getHorarioAluno(token);
         for (Horario h : myHorarios) {
-            Schedule s = new Schedule();
-            s.setClassTitle(db.getUc(h.getCodUC()).getNome());
-            s.setProfessorName(h.getTipo());
-            s.setStartTime(new Time(h.getHoraInicio(), 0));
-            s.setEndTime(new Time(h.getHoraFim(), 0));
-            s.setDay(h.getDia());
-            horarios.add(s);
-            Log.d("o meu horario", s.getDay() + "  cenas " + h.getDia());
-            myTimeTable.add(horarios);
+            Schedule s = getSchedureDb(h);
+            //adiciona se a lista de disciplinas for vazia
+            if (disciplinas.size() == 0) {
+                ArrayList<Schedule> l = new ArrayList<>();
+                disciplinas.add(l);
+                disciplinas.get(0).add(s);
+            } else {//se nao for vazia verifica duas situações 1ª situação encontra uma disciplina com o mesmo nome , 2ª situação não encontra por isso cria uma nova lista e adiciona nessa lsita
+                Boolean hasFound = false;
+                for (int j = 0; j < disciplinas.size(); j++) {
+                    if (s.getClassTitle().equals(disciplinas.get(j).get(0).getClassTitle())) {
+                        disciplinas.get(j).add(s);
+                        hasFound = true;
+                    }
+                }
+                if (!hasFound) {
+                    ArrayList<Schedule> l = new ArrayList<>();
+                    disciplinas.add(l);
+                    disciplinas.get(disciplinas.size() - 1).add(s);
+                }
+            }
+
         }
+        iterateDisciplina();
         Log.d("a minha time table", myTimeTable.getAllSchedulesInStickers().size() + "");
+    }
+
+    /**
+     *
+     */
+    public void iterateDisciplina() {
+        for (int j = 0; j < disciplinas.size(); j++) {
+            myTimeTable.add(disciplinas.get(j));
+        }
+    }
+
+    public Schedule getSchedureDb(Horario h) {
+        Schedule s = new Schedule();
+        s.setClassTitle(db.getUc(h.getCodUC()).getNome());
+        s.setProfessorName(h.getTipo());
+        s.setStartTime(new Time(h.getHoraInicio(), 0));
+        s.setEndTime(new Time(h.getHoraFim(), 0));
+        s.setDay(h.getDia());
+        return s;
+    }
+
+    public Schedule getScheduleWeb(String uc, String tipo, Time tStart, Time tEnd, int day) {
+        Schedule s = new Schedule();
+        s.setClassTitle(uc);
+        s.setProfessorName(tipo);
+        s.setStartTime(tStart);
+        s.setEndTime(tEnd);
+        s.setDay(day);
+        return s;
     }
 }
