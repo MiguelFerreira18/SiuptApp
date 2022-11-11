@@ -42,6 +42,7 @@ public class ListaNotasActivity extends AppCompatActivity {
 
         i = getIntent();
         token = i.getStringExtra(Menu.tokenS);
+        dbHandler = new Db_handler(this);
 
         ListaNotas = dbHandler.getNotas(token);
         ListaUcs = dbHandler.getUcs(token);

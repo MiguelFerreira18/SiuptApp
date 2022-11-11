@@ -40,6 +40,7 @@ public class TimeTable extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_time_table);
         inicializables();
+
         if (connected) {
             getHorario();
         } else {

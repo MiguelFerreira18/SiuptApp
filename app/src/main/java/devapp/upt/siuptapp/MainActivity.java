@@ -67,10 +67,9 @@ public class MainActivity extends AppCompatActivity {
                 public void onResponse(String response) {
                     token = response;
                     token = token.replace("\n", "").trim();
-                    if(token.equals("false"))
-                    {
+                    if (token.equals("false")) {
                         Toast.makeText(MainActivity.this, "Número ou Palavra-Passe incorreta", Toast.LENGTH_SHORT).show();
-                    }else {
+                    } else {
                         String check = db.authCheck(numero, password);
                         check = check.replace("\n", "");
                         if (check.equalsIgnoreCase(""))//Se não existir na base de dados
