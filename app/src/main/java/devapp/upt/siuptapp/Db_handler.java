@@ -49,7 +49,7 @@ public class Db_handler extends SQLiteOpenHelper {
 
    
 
-    public static final int VERSION = 30;//Alterar este valor sempre que se quiser uma base de dados nova
+    public static final int VERSION = 18;//Alterar este valor sempre que se quiser uma base de dados nova
 
 
     //Construtor
