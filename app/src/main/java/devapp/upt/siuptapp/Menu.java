@@ -18,15 +18,8 @@ public class Menu extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
         i = getIntent();
-        token = i.getStringExtra(MainActivity.tokenA);
-        bt1 = findViewById(R.id.myBtn);
-        bt1.setOnClickListener(this::onClick);
-    }
-    public void onClick(View v){
-        Intent i = new Intent(this, TimeTable.class);
-        i.putExtra(tokenS, token);
-        startActivity(i);
-    }
 
+    }
+  
 
 }
