@@ -1,45 +1,23 @@
 package devapp.upt.siuptapp;
 
-import android.content.Context;
-import android.net.ConnectivityManager;
-import android.net.NetworkCapabilities;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.Volley;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 
 public class My_Adapter extends RecyclerView.Adapter<View_Holder>{
 
-    ListaNotasActivity activity;
-    ArrayList<Nota> notas;
-    ArrayList<Uc> UC;
-    String token_aluno;
+    ArrayList<UcNotas> notas;
     View_Holder myViewHolder;
-    MainActivity mainActivity;
-    boolean connected = false;
 
-    public My_Adapter(ArrayList<Nota> listaNotas, ArrayList<Uc> ListaUcs, String token) {
+
+    public My_Adapter(ArrayList<UcNotas> listaNotas) {
         notas = listaNotas;
-        UC = ListaUcs;
-        token_aluno = token;
-
     }
 
     @NonNull
@@ -57,26 +35,27 @@ public class My_Adapter extends RecyclerView.Adapter<View_Holder>{
 
     @Override
     public void onBindViewHolder(@NonNull View_Holder holder, int position) {
-        if (mainActivity.isConnected()) {
-            activity.addUcs(myViewHolder);
-            activity.addNotas(myViewHolder);
-        }
-        else {
-            myViewHolder.textViewUC.setText(UC.get(position).getNome());
-            myViewHolder.textViewNota.setText(notas.get(position).getNota());
-        }
+        Log.d("cenas notas", "onBindViewHolder: "+ myViewHolder.textViewUC);
+        Log.d("cenas notas2", "onBindViewHolder: " + holder.textViewUC);
+        Log.d("cenas notas3", "onBindViewHolder: "+ notas.get(position).getUC());
+        myViewHolder.textViewUC.setText(notas.get(position).getUC());
+        Log.d("cenas notas4", "onBindViewHolder: "+ myViewHolder.textViewNota);
+        Log.d("cenas notas5", "onBindViewHolder: " + holder.textViewNota);
+        Log.d("cenas notas6", "onBindViewHolder: "+ notas.get(position).getNota());
+        myViewHolder.textViewNota.setText(String.valueOf( notas.get(position).getNota()));
     }
 
 
 
-    @Override
-    public int getItemCount() {
-        return notas.size();
-    }
 
     @Override
     public int getItemViewType(int position) {
         return position;
+    }
+
+    @Override
+    public int getItemCount() {
+        return notas.size();
     }
 
 
