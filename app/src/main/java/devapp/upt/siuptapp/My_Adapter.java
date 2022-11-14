@@ -1,5 +1,6 @@
 package devapp.upt.siuptapp;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,8 +35,14 @@ public class My_Adapter extends RecyclerView.Adapter<View_Holder>{
 
     @Override
     public void onBindViewHolder(@NonNull View_Holder holder, int position) {
+        Log.d("cenas notas", "onBindViewHolder: "+ myViewHolder.textViewUC);
+        Log.d("cenas notas2", "onBindViewHolder: " + holder.textViewUC);
+        Log.d("cenas notas3", "onBindViewHolder: "+ notas.get(position).getUC());
         myViewHolder.textViewUC.setText(notas.get(position).getUC());
-        myViewHolder.textViewNota.setText(notas.get(position).getNota());
+        Log.d("cenas notas4", "onBindViewHolder: "+ myViewHolder.textViewNota);
+        Log.d("cenas notas5", "onBindViewHolder: " + holder.textViewNota);
+        Log.d("cenas notas6", "onBindViewHolder: "+ notas.get(position).getNota());
+        myViewHolder.textViewNota.setText(String.valueOf( notas.get(position).getNota()));
     }
 
 

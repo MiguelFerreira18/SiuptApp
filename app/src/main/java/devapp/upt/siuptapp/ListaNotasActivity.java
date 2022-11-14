@@ -42,6 +42,7 @@ public class ListaNotasActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.lista_notas);
+        ListaNotas = new ArrayList<>();
 
         i = getIntent();
         token = i.getStringExtra(Menu.tokenS);
@@ -49,18 +50,14 @@ public class ListaNotasActivity extends AppCompatActivity {
 
         if (isConnected()){
             getNotas();
-            if (ListaNotas.size() > 0) {
-                myadapter = new My_Adapter(ListaNotas);
-            }
+
         }
         else{
             getNotasBd();
-            if (ListaNotas.size() > 0) {
-                myadapter = new My_Adapter(ListaNotas);
-            }
+
         }
 
-
+        myadapter = new My_Adapter(ListaNotas);
         recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setAdapter(myadapter);
 
@@ -85,6 +82,7 @@ public class ListaNotasActivity extends AppCompatActivity {
                                 try {
                                     int ucNota = ucObject.getInt("nota");
                                     ListaNotas.add(new UcNotas(uc, ucNota));
+                                    myadapter.notifyDataSetChanged();
                                 } catch (JSONException e) {
                                     e.printStackTrace();
                                 }
