@@ -1,10 +1,10 @@
 package devapp.upt.siuptapp;
 
-public class Model {
+public class EmentaModel {
     private String prato;
     private int dia;
 
-    public Model(String prato, int dia) {
+    public EmentaModel(String prato, int dia) {
         this.prato = prato;
         this.dia = dia;
     }
