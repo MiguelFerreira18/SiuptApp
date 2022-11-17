@@ -38,15 +38,12 @@ public class AdapterEmenta extends RecyclerView.Adapter<AdapterEmenta.MyEmentaHo
 
     @Override
     public void onBindViewHolder(@NonNull MyEmentaHolder holder, int position) {
-
         switch (position) {
             case 0:
                 Glide.with(ct).load("https://img.myloview.com.br/posters/bowl-of-soup-vector-illustration-isolated-on-green-background-linear-color-style-of-soup-icon-400-245969672.jpg").into(holder.im);
-                System.out.println("1");
                 break;
             case 1:
                 Glide.with(ct).load("https://cdn.xxl.thumbs.canstockphoto.com/chicken-leg-sign-white-icon-on-red-background-illustration_csp37424323.jpg").into(holder.im);
-                System.out.println("2");
                 break;
             case 2:
                 Glide.with(ct).load("https://thumbs.dreamstime.com/b/silver-fish-icon-isolated-blue-background-vector-192250320.jpg").into(holder.im);
