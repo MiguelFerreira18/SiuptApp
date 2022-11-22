@@ -2,7 +2,10 @@ package devapp.upt.siuptapp;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkCapabilities;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
@@ -33,7 +36,7 @@ public class TimeTable extends AppCompatActivity {
     TimetableView myTimeTable;
     RequestQueue queue;
     Db_handler db;
-    boolean connected = false;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,7 +44,7 @@ public class TimeTable extends AppCompatActivity {
         setContentView(R.layout.activity_time_table);
         inicializables();
 
-        if (connected) {
+        if (isConnected()) {
             getHorario();
         } else {
             getHorarioBd();
@@ -206,4 +209,24 @@ public class TimeTable extends AppCompatActivity {
         s.setDay(day);
         return s;
     }
+    public boolean isConnected() {
+        ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        if (connectivityManager != null) {
+            NetworkCapabilities capabilities = connectivityManager.getNetworkCapabilities(connectivityManager.getActiveNetwork());
+            if (capabilities != null) {
+                if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)) {
+                    Log.i("Internet", "NetworkCapabilities.TRANSPORT_CELLULAR");
+                    return true;
+                } else if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)) {
+                    Log.i("Internet", "NetworkCapabilities.TRANSPORT_WIFI");
+                    return true;
+                } else if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET)) {
+                    Log.i("Internet", "NetworkCapabilities.TRANSPORT_ETHERNET");
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
 }
