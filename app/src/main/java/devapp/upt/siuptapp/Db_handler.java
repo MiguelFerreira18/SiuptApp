@@ -49,7 +49,7 @@ public class Db_handler extends SQLiteOpenHelper {
 
    
 
-    public static final int VERSION = 18;//Alterar este valor sempre que se quiser uma base de dados nova
+    public static final int VERSION = 30;//Alterar este valor sempre que se quiser uma base de dados nova
 
 
     //Construtor
@@ -143,7 +143,7 @@ public class Db_handler extends SQLiteOpenHelper {
         String query = String.format("SELECT * FROM %s WHERE %s = %s", DB_UC_TABLE, UCCOD, ucCod);
         Cursor cursor = db.rawQuery(query, null);
         if (cursor.moveToFirst()) {
-            Uc uc = new Uc(cursor.getInt(0), cursor.getString(1));
+            Uc uc = new Uc(cursor.getInt(0), cursor.getString(1).replace("\n", ""));
             return uc;
         }
         return null;
@@ -166,7 +166,7 @@ public class Db_handler extends SQLiteOpenHelper {
             do {
                 Uc u = new Uc();
                 u.setCodUC(cursor.getInt(0));
-                u.setNome(cursor.getString(2));
+                u.setNome(cursor.getString(1).replace("\n", ""));
                 ucs.add(u);
             } while (cursor.moveToNext());
         }

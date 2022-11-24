@@ -26,68 +26,62 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-import devapp.upt.siuptapp.adapters.AdapterNotas;
+import devapp.upt.siuptapp.adapters.AdapterUCs;
 
-public class ListaNotasActivity extends AppCompatActivity {
+public class lista_Ucs extends AppCompatActivity {
+
     Db_handler dbHandler;
     RequestQueue queue;
     Intent i;
     String token;
-    ArrayList<UcNotas> ListaNotas;
-    ArrayList<Nota> Notas;
-    ArrayList<Uc> ListaUcs;
-    AdapterNotas myadapter;
-    RecyclerView recyclerView;
+    AdapterUCs myadapter;
+    RecyclerView recyclerViewUCs;
+    ArrayList<String> ListaUCs;
+    ArrayList<Uc> ListaUCsBD;
     LinearLayoutManager layoutManager;
 
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.lista_notas);
-        ListaNotas = new ArrayList<>();
-        ListaUcs = new ArrayList<>();
+        setContentView(R.layout.activity_lista_ucs);
+        ListaUCs = new ArrayList<>();
 
         i = getIntent();
         token = i.getStringExtra(Menu.tokenS);
         dbHandler = new Db_handler(this);
 
-        if (isConnected()){
-            getNotas();
-
-        }
-        else{
-            getNotasBd();
-
+        if (isConnected()) {
+            getUCs();
+        } else {
+            getUCsBD();
         }
 
-        myadapter = new AdapterNotas(ListaNotas);
-        recyclerView = findViewById(R.id.recyclerView);
-        recyclerView.setAdapter(myadapter);
+        myadapter = new AdapterUCs(ListaUCs);
+        recyclerViewUCs = findViewById(R.id.recyclerViewUCs);
+        recyclerViewUCs.setAdapter(myadapter);
 
         layoutManager = new LinearLayoutManager(this);
-        recyclerView.setLayoutManager(layoutManager);
-
+        recyclerViewUCs.setLayoutManager(layoutManager);
     }
 
-    public void getNotas(){
-        queue = Volley.newRequestQueue(ListaNotasActivity.this);
-        String myUrl = "https://alunos.upt.pt/~abilioc/dam.php?func=classificacao&token=" + token;
+    public void getUCs() {
+        queue = Volley.newRequestQueue(lista_Ucs.this);
+        String myUrl = "https://alunos.upt.pt/~abilioc/dam.php?func=horario&token=" + token;
         JsonObjectRequest jObeject = new JsonObjectRequest(Request.Method.GET, myUrl, null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
                 try {
-                    JSONArray ucs = response.getJSONArray("classificacao");
+                    JSONArray ucs = response.getJSONArray("horario");
                     for (int i = 0; i < ucs.length(); i++) {
                         JSONObject ucObject = ucs.getJSONObject(i);
-                        getUc(ucObject.getInt("uc"), new ICallBack() {
+                        getUc(ucObject.getInt("codigoUC"), new ICallBack() {
                             @Override
                             public void onSuccess(String uc) {
-                                try {
-                                    int ucNota = ucObject.getInt("nota");
-                                    ListaNotas.add(new UcNotas(uc, ucNota));
-                                    myadapter.notifyDataSetChanged();
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
+                                if (ListaUCs.contains(uc)) {
+                                } else {
+                                    ListaUCs.add(uc);
                                 }
+                                myadapter.notifyDataSetChanged();
                             }
                         });
 
@@ -99,21 +93,16 @@ public class ListaNotasActivity extends AppCompatActivity {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(ListaNotasActivity.this, "Failed to get Response", Toast.LENGTH_SHORT).show();
+                Toast.makeText(lista_Ucs.this, "Failed to get Response", Toast.LENGTH_SHORT).show();
             }
         });
         queue.add(jObeject);
     }
 
-
-    public void getNotasBd(){
-        Notas = dbHandler.getNotas(token);
-        for (int i = 0; i < Notas.size(); i++){
-            int temp = Notas.get(i).getCodUC();
-            ListaUcs.add(dbHandler.getUc(temp));
-        }
-        for (int i = 0; i < Notas.size(); i++){
-            ListaNotas.add(new UcNotas(ListaUcs.get(i).getNome(), Notas.get(i).getNota()));
+    public void getUCsBD() {
+        ListaUCsBD = (dbHandler.getUcs(token));
+        for (int i = 0; i < ListaUCsBD.size(); i++) {
+            ListaUCs.add(ListaUCsBD.get(i).getNome());
         }
     }
 
@@ -124,13 +113,13 @@ public class ListaNotasActivity extends AppCompatActivity {
         StringRequest sr = new StringRequest(Request.Method.GET, myUrl, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                Toast.makeText(ListaNotasActivity.this, "done", Toast.LENGTH_SHORT).show();
-                callback.onSuccess(response);
+                Toast.makeText(lista_Ucs.this, "done", Toast.LENGTH_SHORT).show();
+                callback.onSuccess(response.replace("\n", ""));
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(ListaNotasActivity.this, "Erro" + error, Toast.LENGTH_SHORT).show();
+                Toast.makeText(lista_Ucs.this, "Erro" + error, Toast.LENGTH_SHORT).show();
 
             }
         });
