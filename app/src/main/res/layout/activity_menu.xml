@@ -30,18 +30,18 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:srcCompat="@drawable/top_background" />
+                    app:srcCompat="@drawable/image_top" />
 
                 <ImageView
                     android:id="@+id/imageView4"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="155dp"
+                    android:layout_height="151dp"
                     android:scaleType="fitXY"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="@+id/imageView3"
-                    app:srcCompat="@drawable/profile" />
+                    app:srcCompat="@drawable/logo_upt_centrado" />
 
                 <TextView
                     android:id="@+id/textView5"
@@ -104,7 +104,7 @@
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toTopOf="parent"
                                 app:layout_constraintVertical_bias="0.0"
-                                app:srcCompat="@drawable/circle_green" />
+                                app:srcCompat="@drawable/circle_uptcor" />
 
                             <ImageView
                                 android:id="@+id/imageView6"
@@ -152,7 +152,7 @@
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toTopOf="parent"
                                 app:layout_constraintVertical_bias="0.0"
-                                app:srcCompat="@drawable/circle_green" />
+                                app:srcCompat="@drawable/circle_uptcor" />
 
                             <ImageView
                                 android:id="@+id/imageView8"
@@ -200,7 +200,7 @@
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toTopOf="parent"
                                 app:layout_constraintVertical_bias="0.0"
-                                app:srcCompat="@drawable/circle_green" />
+                                app:srcCompat="@drawable/circle_uptcor" />
 
                             <ImageView
                                 android:id="@+id/imageView10"
@@ -256,7 +256,7 @@
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toTopOf="parent"
                                 app:layout_constraintVertical_bias="0.0"
-                                app:srcCompat="@drawable/circle_green" />
+                                app:srcCompat="@drawable/circle_uptcor" />
 
                             <ImageView
                                 android:id="@+id/imageView12"
@@ -304,7 +304,7 @@
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toTopOf="parent"
                                 app:layout_constraintVertical_bias="0.0"
-                                app:srcCompat="@drawable/circle_green" />
+                                app:srcCompat="@drawable/circle_uptcor" />
 
                             <ImageView
                                 android:id="@+id/imageView14"
@@ -352,7 +352,7 @@
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toTopOf="parent"
                                 app:layout_constraintVertical_bias="0.0"
-                                app:srcCompat="@drawable/circle_green" />
+                                app:srcCompat="@drawable/circle_uptcor" />
 
                             <ImageView
                                 android:id="@+id/imageView16"
