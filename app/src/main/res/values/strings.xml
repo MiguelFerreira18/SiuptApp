@@ -18,9 +18,10 @@
     <string name="loginB">Login</string>
 
     <string name="nextActivity">Próxima Actividade</string>
-    
+
     <string name="timeTable">Horario</string>
     <string name="notas">Notas</string>
     <string name="ementa">Ementa</string>
+    <string name="UCs">UCs Inscritas</string>
 
 </resources>

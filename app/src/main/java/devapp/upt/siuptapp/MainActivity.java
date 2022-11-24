@@ -59,6 +59,7 @@ public class MainActivity extends AppCompatActivity {
     public void login(View v) {
         numero = num.getText().toString();
         password = p.getText().toString();
+        System.out.println(numero + password);
         if (isConnected()) {
             String myUrl = "https://alunos.upt.pt/~abilioc/dam.php?func=auth&login=" + numero + "&password=" + password;
             queue = Volley.newRequestQueue(MainActivity.this);
@@ -269,14 +270,26 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onResponse(JSONObject response) {
                 try {
+                    Log.d("CENAS", "onResponse: ENTROU" );
                     JSONArray myArray = response.getJSONArray("classificacao");
                     for (int i = 0; i < myArray.length(); i++) {
                         JSONObject jo = myArray.getJSONObject(i);
-                        Nota n = new Nota();
-                        n.setCodUC(jo.getInt("uc"));
-                        n.setNota(jo.getInt("nota"));
-                        n.setNumAluno(db.checkToken(token));
-                        db.addNota(n);
+                        getUc(jo.getInt("uc"), new ICallBack() {
+                            @Override
+                            public void onSuccess(String uc) {
+                                try {
+                                    db.addUc(new Uc(jo.getInt("uc"), uc));
+                                    Nota n = new Nota();
+                                    n.setCodUC(jo.getInt("uc"));
+                                    n.setNota(jo.getInt("nota"));
+                                    n.setNumAluno(db.checkToken(token));
+                                    db.addNota(n);
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        });
+
 
                     }
                 } catch (JSONException e) {

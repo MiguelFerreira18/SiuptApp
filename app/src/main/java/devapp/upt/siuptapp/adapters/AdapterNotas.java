@@ -1,4 +1,4 @@
-package devapp.upt.siuptapp;
+package devapp.upt.siuptapp.adapters;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -10,31 +10,35 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
-public class My_Adapter extends RecyclerView.Adapter<View_Holder>{
+import devapp.upt.siuptapp.R;
+import devapp.upt.siuptapp.UcNotas;
+import devapp.upt.siuptapp.View_HolderNotas;
+
+public class AdapterNotas extends RecyclerView.Adapter<View_HolderNotas>{
 
     ArrayList<UcNotas> notas;
-    View_Holder myViewHolder;
+    View_HolderNotas myViewHolder;
 
 
-    public My_Adapter(ArrayList<UcNotas> listaNotas) {
+    public AdapterNotas(ArrayList<UcNotas> listaNotas) {
         notas = listaNotas;
     }
 
     @NonNull
     @Override
-    public View_Holder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public View_HolderNotas onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view;
 
         view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.recycle_view_notas, parent, false);
 
-        myViewHolder = new View_Holder(view);
+        myViewHolder = new View_HolderNotas(view);
         return myViewHolder;
     }
 
 
     @Override
-    public void onBindViewHolder(@NonNull View_Holder holder, int position) {
+    public void onBindViewHolder(@NonNull View_HolderNotas holder, int position) {
         Log.d("cenas notas", "onBindViewHolder: "+ myViewHolder.textViewUC);
         Log.d("cenas notas2", "onBindViewHolder: " + holder.textViewUC);
         Log.d("cenas notas3", "onBindViewHolder: "+ notas.get(position).getUC());

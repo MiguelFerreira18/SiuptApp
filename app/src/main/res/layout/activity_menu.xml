@@ -234,6 +234,7 @@
                     android:orientation="horizontal">
 
                     <LinearLayout
+                        android:id="@+id/UCs_Incritas"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
@@ -246,7 +247,7 @@
                             android:background="@drawable/background_button_menu">
 
                             <ImageView
-                                android:id="@+id/imageView11"
+                                android:id="@+id/Incricao"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 app:layout_constraintBottom_toBottomOf="parent"
@@ -264,7 +265,7 @@
                                 app:layout_constraintBottom_toBottomOf="parent"
                                 app:layout_constraintEnd_toEndOf="parent"
                                 app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toTopOf="@+id/imageView11"
+                                app:layout_constraintTop_toTopOf="@+id/Incricao"
                                 app:srcCompat="@drawable/sair" />
 
                         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -274,7 +275,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="40dp"
                             android:gravity="center"
-                            android:text="Sair"
+                            android:text="@string/UCs"
                             android:textAlignment="center"
                             android:textColor="#34346e"
                             android:textSize="18dp"
