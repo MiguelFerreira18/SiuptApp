@@ -100,10 +100,7 @@ public class lista_Ucs extends AppCompatActivity {
     }
 
     public void getUCsBD() {
-        ListaUCsBD = (dbHandler.getUcs(token));
-        for (int i = 0; i < ListaUCsBD.size(); i++) {
-            ListaUCs.add(ListaUCsBD.get(i).getNome());
-        }
+        ListaUCs = (dbHandler.getInscritas(token));
     }
 
     public void getUc(int uc, final ICallBack callback) {
