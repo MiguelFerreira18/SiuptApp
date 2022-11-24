@@ -153,8 +153,8 @@ public class MainActivity extends AppCompatActivity {
         //adiciona os horarios
         addHorario(number);
         //adiciona as notas
-
         addNotas();
+        //adiciona as ucs do aluno à inscrição
 
     }
 
@@ -167,6 +167,30 @@ public class MainActivity extends AppCompatActivity {
         //adiciona o aluno into db
         db.addAluno(a);
         Toast.makeText(MainActivity.this, "al Add", Toast.LENGTH_SHORT).show();
+    }
+    private void addInscricao(){
+        String myUrl = "http://alunos.upt.pt/~abilioc/dam.php?func=uc_inscrito&token="+ token;
+        queue = Volley.newRequestQueue(MainActivity.this);
+        JsonObjectRequest sr = new JsonObjectRequest(Request.Method.GET, myUrl, null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                try {
+                    JSONArray ja = response.getJSONArray("inscrito");
+                    for (int i = 0; i < ja.length(); i++) {
+                        JSONObject jo = ja.getJSONObject(i);
+                        int uc = jo.getInt("uc");
+                        db.addInscr(new Inscricao(Integer.parseInt(numero), uc));
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                System.out.println("-----errorresponse");
+            }
+        });
     }
 
 
