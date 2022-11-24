@@ -8,6 +8,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import androidx.annotation.Nullable;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class Db_handler extends SQLiteOpenHelper {
 
@@ -17,6 +18,7 @@ public class Db_handler extends SQLiteOpenHelper {
     public static final String DB_UC_TABLE = "UC";
     public static final String DB_AL_TABLE = "AL";
     public static final String DB_AL_UC_HORARIO_TABLE = "HOR";
+    public static final String DB_AL_UC_INSCR = "UCINCR";
     public static final String DB_AL_UC_NOTAS_TABLE = "NOTAS";
 
     //TABLE UC
@@ -43,13 +45,21 @@ public class Db_handler extends SQLiteOpenHelper {
     public static final String AL_NOT_NUM = "NUMALUNO";
     public static final String UC_NOT_COD = "CODUC";
     public static final String NOTA = "NOTA";
+    //TABLE INTERMEDIA UCINSCRITA
+    public static final String UCINSCID = "UCINSCID";
+    public static final String AL_UCINSC_NUM = "NUMALUNO";
+    public static final String UC_UCINSC_COD = "CODUC";
+
+
+
 
     //DATABASE DEFINITIONS
     public static final String DBNAME = "mydatabase";
 
+
    
 
-    public static final int VERSION = 30;//Alterar este valor sempre que se quiser uma base de dados nova
+    public static final int VERSION = 31;//Alterar este valor sempre que se quiser uma base de dados nova
 
 
     //Construtor
@@ -65,10 +75,12 @@ public class Db_handler extends SQLiteOpenHelper {
         String queryALTable = String.format("CREATE TABLE %s( %s INTEGER PRIMARY KEY,%s TEXT,%s Text,%s TEXT)", DB_AL_TABLE, ALNUM, ALNOME, ALPASS, ALTOKEN);
         String queryHorarioTable = String.format("CREATE TABLE %s(%s INTEGER PRIMARY KEY AUTOINCREMENT, %s INTEGER,%s INTEGER,%s TEXT,%s INTEGER,%s INTEGER,%s TEXT, FOREIGN KEY(%s) REFERENCES %s(%s), FOREIGN KEY(%s) REFERENCES %s(%s))", DB_AL_UC_HORARIO_TABLE, HORID, AL_HOR_NUM, UC_HORARIO_COD, HORDIA, HORI, HORF, HORTIPO, AL_HOR_NUM, DB_AL_TABLE, ALNUM, UC_HORARIO_COD, DB_UC_TABLE, UCCOD);
         String queryNotaTable = String.format("CREATE TABLE %s(%s INTEGER PRIMARY KEY AUTOINCREMENT, %s INTEGER,%s INTEGER,%s INTEGER, FOREIGN KEY(%s) REFERENCES %s(%s), FOREIGN KEY(%s) REFERENCES %s(%s))", DB_AL_UC_NOTAS_TABLE, NOTID, AL_NOT_NUM, UC_NOT_COD, NOTA, AL_NOT_NUM, DB_AL_TABLE, ALNUM, UC_NOT_COD, DB_UC_TABLE, UCCOD);
+        String queryUCInscritaTable = String.format("CREATE TABLE %s(%s INTEGER PRIMARY KEY AUTOINCREMENT, %s INTEGER,%s INTEGER, FOREIGN KEY(%s) REFERENCES %s(%s), FOREIGN KEY(%s) REFERENCES %s(%s))",DB_AL_UC_INSCR, UCINSCID, AL_UCINSC_NUM, UC_UCINSC_COD, AL_UCINSC_NUM, DB_AL_TABLE, ALNUM, UC_UCINSC_COD, DB_UC_TABLE, UCCOD);
         sqLiteDatabase.execSQL(queryUCTable);
         sqLiteDatabase.execSQL(queryALTable);
         sqLiteDatabase.execSQL(queryHorarioTable);
         sqLiteDatabase.execSQL(queryNotaTable);
+        sqLiteDatabase.execSQL(queryUCInscritaTable);
 
     }
 
@@ -77,9 +89,36 @@ public class Db_handler extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + DB_UC_TABLE);
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + DB_AL_TABLE);
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + DB_AL_UC_HORARIO_TABLE);
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + DB_AL_UC_INSCR);
         sqLiteDatabase.execSQL(String.format("DROP TABLE IF EXISTS %s", DB_AL_UC_NOTAS_TABLE));
         onCreate(sqLiteDatabase);
     }
+/*LATERAR O SITIO DISTO*/
+    public void addInscr(Inscricao inscricao) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        String query = String.format("INSERT INTO %s(%s,%s) VALUES(%s,%s)", DB_AL_UC_INSCR, AL_UCINSC_NUM, UC_UCINSC_COD, inscricao.getAlunoId(), inscricao.getUcId());
+        db.close();
+    }
+    public ArrayList<String> getInscritas(String token){
+ArrayList<String> inscritas = new ArrayList<>();
+ArrayList<Integer> ucCods = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+        int al = checkToken(token);
+        String query = String.format("SELECT %s FROM %s WHERE %s = %s", UC_UCINSC_COD, DB_AL_UC_INSCR, AL_UCINSC_NUM, al);
+        Cursor cursor = db.rawQuery(query, null);
+
+        if(cursor.moveToFirst()){
+            do{
+                ucCods.add(cursor.getInt(0));
+            }while(cursor.moveToNext());
+        }
+        cursor.close();
+        for (int i = 0; i < ucCods.size(); i++) {
+            inscritas.add(getUc(ucCods.get(i)).getNome());
+        }
+        return inscritas;
+    }
+
 
     /**
      * adiciona um aluno na base de dados
