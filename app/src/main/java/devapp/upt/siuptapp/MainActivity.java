@@ -59,6 +59,7 @@ public class MainActivity extends AppCompatActivity {
     public void login(View v) {
         numero = num.getText().toString();
         password = p.getText().toString();
+        System.out.println(numero + password);
         if (isConnected()) {
             String myUrl = "https://alunos.upt.pt/~abilioc/dam.php?func=auth&login=" + numero + "&password=" + password;
             queue = Volley.newRequestQueue(MainActivity.this);

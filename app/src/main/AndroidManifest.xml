@@ -17,6 +17,13 @@
         android:theme="@style/Theme.SiuptApp"
         tools:targetApi="31">
         <activity
+            android:name=".lista_Ucs"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
             android:name=".Ementa"
             android:exported="false">
             <meta-data
