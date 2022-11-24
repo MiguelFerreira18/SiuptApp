@@ -59,7 +59,7 @@ public class Db_handler extends SQLiteOpenHelper {
 
    
 
-    public static final int VERSION = 31;//Alterar este valor sempre que se quiser uma base de dados nova
+    public static final int VERSION = 37;//Alterar este valor sempre que se quiser uma base de dados nova
 
 
     //Construtor
@@ -288,7 +288,7 @@ ArrayList<Integer> ucCods = new ArrayList<>();
                 }
             }
         }
-        return "";
+        return null;
     }
 
     /**

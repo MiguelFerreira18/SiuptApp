@@ -77,8 +77,6 @@ public class MainActivity extends AppCompatActivity {
                         {
                             addToDataBase(Integer.parseInt(numero), password, token);
                         }
-
-
                         Intent i = new Intent(MainActivity.this, Menu.class);
                         i.putExtra(tokenA, token);
                         startActivity(i);
@@ -155,6 +153,7 @@ public class MainActivity extends AppCompatActivity {
         //adiciona as notas
         addNotas();
         //adiciona as ucs do aluno à inscrição
+        addInscricao();
 
     }
 
@@ -169,7 +168,7 @@ public class MainActivity extends AppCompatActivity {
         Toast.makeText(MainActivity.this, "al Add", Toast.LENGTH_SHORT).show();
     }
     private void addInscricao(){
-        String myUrl = "http://alunos.upt.pt/~abilioc/dam.php?func=uc_inscrito&token="+ token;
+        String myUrl = "https://alunos.upt.pt/~abilioc/dam.php?func=uc_inscrito&token="+ token;
         queue = Volley.newRequestQueue(MainActivity.this);
         JsonObjectRequest sr = new JsonObjectRequest(Request.Method.GET, myUrl, null, new Response.Listener<JSONObject>() {
             @Override
@@ -180,6 +179,8 @@ public class MainActivity extends AppCompatActivity {
                         JSONObject jo = ja.getJSONObject(i);
                         int uc = jo.getInt("uc");
                         db.addInscr(new Inscricao(Integer.parseInt(numero), uc));
+
+
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -191,6 +192,8 @@ public class MainActivity extends AppCompatActivity {
                 System.out.println("-----errorresponse");
             }
         });
+        ;
+        queue.add(sr);
     }
 
 
@@ -230,7 +233,7 @@ public class MainActivity extends AppCompatActivity {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(MainActivity.this, "Failed to get Response", Toast.LENGTH_SHORT).show();
+                System.out.println("-----errorresponse");
             }
         });
         queue.add(jObeject);
@@ -277,7 +280,8 @@ public class MainActivity extends AppCompatActivity {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(MainActivity.this, "h Add", Toast.LENGTH_SHORT).show();
+                System.out.println("-----errorresponse");
+
             }
         });
         queue.add(jsonObjectRequest);
@@ -324,8 +328,8 @@ public class MainActivity extends AppCompatActivity {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(MainActivity.this, "Error in notas", Toast.LENGTH_SHORT).show();
-                Log.d("adicionadas||||||||||||", "onResponse:not added Notas ");
+                System.out.println("-----errorresponse");
+
             }
         });
         queue.add(jsonObjectRequest);
@@ -353,7 +357,7 @@ public class MainActivity extends AppCompatActivity {
             public void onErrorResponse(VolleyError error) {
 
                 myUc = null;
-                Toast.makeText(MainActivity.this, "Error in ucs", Toast.LENGTH_SHORT).show();
+                System.out.println("-----errorresponse");
             }
         });
         queue.add(sr);
