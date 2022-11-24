@@ -180,7 +180,7 @@ public class MainActivity extends AppCompatActivity {
                     for (int i = 0; i < ja.length(); i++) {
                         JSONObject jo = ja.getJSONObject(i);
                         int myUc = jo.getInt("uc");
-                        db.addInscr(new Inscricao(Integer.parseInt(numero), myUc));
+                        db.addInscr(new Inscricao(myUc, Integer.parseInt(numero)));
                     }
                 } catch (Exception e) {
                     e.printStackTrace();

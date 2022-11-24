@@ -59,7 +59,7 @@ public class Db_handler extends SQLiteOpenHelper {
 
    
 
-    public static final int VERSION = 38;//Alterar este valor sempre que se quiser uma base de dados nova
+    public static final int VERSION = 41;//Alterar este valor sempre que se quiser uma base de dados nova
 
 
     //Construtor
@@ -115,7 +115,11 @@ ArrayList<Integer> ucCods = new ArrayList<>();
         }
         cursor.close();
         for (int i = 0; i < ucCods.size(); i++) {
-            inscritas.add(getUc(ucCods.get(i)).getNome());
+            if (inscritas.contains(getUc(ucCods.get(i)).getNome())) {
+            }
+            else{
+                inscritas.add(getUc(ucCods.get(i)).getNome());
+            }
         }
         return inscritas;
     }
