@@ -288,7 +288,7 @@ ArrayList<Integer> ucCods = new ArrayList<>();
                 }
             }
         }
-        return null;
+        return "";
     }
 
     /**

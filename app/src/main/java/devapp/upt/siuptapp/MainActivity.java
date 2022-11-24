@@ -93,7 +93,7 @@ public class MainActivity extends AppCompatActivity {
         } else//Se não houver acesso à internet
         {
             String check = db.authCheck(numero, password);
-            if (check != null) {
+            if (!check.equals("")) {
                 Intent i = new Intent(this, Menu.class);
                 i.putExtra(tokenA, check);
                 startActivity(i);
