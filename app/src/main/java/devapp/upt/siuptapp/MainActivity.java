@@ -167,22 +167,22 @@ public class MainActivity extends AppCompatActivity {
         db.addAluno(a);
         Toast.makeText(MainActivity.this, "al Add", Toast.LENGTH_SHORT).show();
     }
-    private void addInscricao(){
-        String myUrl = "https://alunos.upt.pt/~abilioc/dam.php?func=uc_inscrito&token="+ token;
+
+    private void addInscricao() {
+        String myUrl = "https://alunos.upt.pt/~abilioc/dam.php?func=uc_inscrito&token=" + token;
         queue = Volley.newRequestQueue(MainActivity.this);
         JsonObjectRequest sr = new JsonObjectRequest(Request.Method.GET, myUrl, null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
+
                 try {
                     JSONArray ja = response.getJSONArray("inscrito");
                     for (int i = 0; i < ja.length(); i++) {
                         JSONObject jo = ja.getJSONObject(i);
-                        int uc = jo.getInt("uc");
-                        db.addInscr(new Inscricao(Integer.parseInt(numero), uc));
-
-
+                        int myUc = jo.getInt("uc");
+                        db.addInscr(new Inscricao(Integer.parseInt(numero), myUc));
                     }
-                } catch (JSONException e) {
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
@@ -192,7 +192,6 @@ public class MainActivity extends AppCompatActivity {
                 System.out.println("-----errorresponse");
             }
         });
-        ;
         queue.add(sr);
     }
 
@@ -299,7 +298,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onResponse(JSONObject response) {
                 try {
-                    Log.d("CENAS", "onResponse: ENTROU" );
+                    Log.d("CENAS", "onResponse: ENTROU");
                     JSONArray myArray = response.getJSONArray("classificacao");
                     for (int i = 0; i < myArray.length(); i++) {
                         JSONObject jo = myArray.getJSONObject(i);

@@ -59,7 +59,7 @@ public class Db_handler extends SQLiteOpenHelper {
 
    
 
-    public static final int VERSION = 37;//Alterar este valor sempre que se quiser uma base de dados nova
+    public static final int VERSION = 38;//Alterar este valor sempre que se quiser uma base de dados nova
 
 
     //Construtor
@@ -97,6 +97,7 @@ public class Db_handler extends SQLiteOpenHelper {
     public void addInscr(Inscricao inscricao) {
         SQLiteDatabase db = this.getWritableDatabase();
         String query = String.format("INSERT INTO %s(%s,%s) VALUES(%s,%s)", DB_AL_UC_INSCR, AL_UCINSC_NUM, UC_UCINSC_COD, inscricao.getAlunoId(), inscricao.getUcId());
+        db.execSQL(query);
         db.close();
     }
     public ArrayList<String> getInscritas(String token){
