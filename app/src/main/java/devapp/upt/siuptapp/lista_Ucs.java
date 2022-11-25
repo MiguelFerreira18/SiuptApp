@@ -1,6 +1,7 @@
 package devapp.upt.siuptapp;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -10,6 +11,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkCapabilities;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -37,8 +39,9 @@ public class lista_Ucs extends AppCompatActivity {
     AdapterUCs myadapter;
     RecyclerView recyclerViewUCs;
     ArrayList<String> ListaUCs;
-    ArrayList<Uc> ListaUCsBD;
     LinearLayoutManager layoutManager;
+    ConstraintLayout cl;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +65,15 @@ public class lista_Ucs extends AppCompatActivity {
 
         layoutManager = new LinearLayoutManager(this);
         recyclerViewUCs.setLayoutManager(layoutManager);
+
+        cl = findViewById(R.id.finishBtnListaUcs);
+        cl.setOnClickListener(this::onClick);
+    }
+
+    public void onClick(View v)
+    {
+        finish();
+        overridePendingTransition(R.anim.slide_in_left,R.anim.slide_out_right);
     }
 
     public void getUCs() {

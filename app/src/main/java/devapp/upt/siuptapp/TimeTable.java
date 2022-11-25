@@ -1,6 +1,7 @@
 package devapp.upt.siuptapp;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import android.content.Context;
 import android.content.Intent;
@@ -8,6 +9,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkCapabilities;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -36,6 +38,7 @@ public class TimeTable extends AppCompatActivity {
     TimetableView myTimeTable;
     RequestQueue queue;
     Db_handler db;
+    ConstraintLayout cl;
 
 
     @Override
@@ -43,6 +46,8 @@ public class TimeTable extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_time_table);
         inicializables();
+        cl = findViewById(R.id.finishBtnTimeTable);
+        cl.setOnClickListener(this::onClick);
 
         if (isConnected()) {
             getHorario();
@@ -51,7 +56,11 @@ public class TimeTable extends AppCompatActivity {
         }
     }
 
-
+    public void onClick(View v)
+    {
+        finish();
+        overridePendingTransition(R.anim.slide_in_left,R.anim.slide_out_right);
+    }
     /**
      *
      */
