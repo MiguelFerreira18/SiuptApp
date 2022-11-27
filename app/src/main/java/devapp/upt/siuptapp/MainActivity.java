@@ -80,6 +80,7 @@ public class MainActivity extends AppCompatActivity {
                         Intent i = new Intent(MainActivity.this, Menu.class);
                         i.putExtra(tokenA, token);
                         startActivity(i);
+                        overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_left);
                     }
                 }
             }, new Response.ErrorListener() {
@@ -360,5 +361,10 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         queue.add(sr);
+    }
+
+    public void finishActivity(View v)
+    {
+        finish();
     }
 }

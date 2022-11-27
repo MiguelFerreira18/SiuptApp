@@ -1,6 +1,7 @@
 package devapp.upt.siuptapp;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -10,6 +11,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkCapabilities;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -39,6 +41,7 @@ public class ListaNotasActivity extends AppCompatActivity {
     AdapterNotas myadapter;
     RecyclerView recyclerView;
     LinearLayoutManager layoutManager;
+    ConstraintLayout cl;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,6 +52,9 @@ public class ListaNotasActivity extends AppCompatActivity {
         i = getIntent();
         token = i.getStringExtra(Menu.tokenS);
         dbHandler = new Db_handler(this);
+
+        cl = findViewById(R.id.finishBtnListaNotas);
+        cl.setOnClickListener(this::onClick);
 
         if (isConnected()){
             getNotas();
@@ -66,6 +72,11 @@ public class ListaNotasActivity extends AppCompatActivity {
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
 
+    }
+    public void onClick(View view)
+    {
+        finish();
+        overridePendingTransition(R.anim.slide_in_left,R.anim.slide_out_right);
     }
 
     public void getNotas(){

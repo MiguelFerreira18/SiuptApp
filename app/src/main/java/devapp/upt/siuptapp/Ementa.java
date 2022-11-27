@@ -1,6 +1,7 @@
 package devapp.upt.siuptapp;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -35,6 +36,7 @@ public class Ementa extends AppCompatActivity {
     AdapterEmenta ementaAdapter;
     RequestQueue queue;
     ArrayList<EmentaModel> ementas;
+    ConstraintLayout cl;
 
 
     @Override
@@ -69,6 +71,15 @@ public class Ementa extends AppCompatActivity {
 
             }
         });
+
+        cl = findViewById(R.id.finishBtnEmenta);
+        cl.setOnClickListener(this::onClick);
+    }
+
+    public void onClick(View v)
+    {
+        finish();
+        overridePendingTransition(R.anim.slide_in_left,R.anim.slide_out_right);
     }
 
 
