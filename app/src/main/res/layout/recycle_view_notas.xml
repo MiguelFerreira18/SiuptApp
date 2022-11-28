@@ -12,28 +12,31 @@
 
     <TextView
         android:id="@+id/textViewUC"
-        android:layout_width="250dp"
-        android:layout_height="50dp"
-        android:layout_marginStart="36dp"
-        android:gravity="center|top"
-        android:textColor="@color/white"
-        android:textSize="21sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/textViewNota"
-        android:layout_width="65dp"
-        android:layout_height="50dp"
-        android:layout_marginStart="320dp"
-        android:gravity="top"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:gravity="left"
         android:textColor="@color/white"
         android:textSize="25sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHeight_percent="1"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintWidth_percent="0.75" />
+
+    <TextView
+        android:id="@+id/textViewNota"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:gravity="center"
+        android:textColor="@color/white"
+        android:textSize="25sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHeight_percent="1"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintWidth_percent="0.2"
+        app:layout_goneMarginEnd="10dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
