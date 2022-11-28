@@ -79,13 +79,11 @@ public class TimeTable extends AppCompatActivity {
     public void getHorario() {
         queue = Volley.newRequestQueue(TimeTable.this);
         String myUrl = "https://alunos.upt.pt/~abilioc/dam.php?func=horario&token=" + token;
-        // Toast.makeText(TimeTable.this, myUrl, Toast.LENGTH_SHORT).show();
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, myUrl, null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
                 try {
                     JSONArray myArray = response.getJSONArray("horario");
-                    Toast.makeText(TimeTable.this, " " + myArray, Toast.LENGTH_LONG).show();
                     for (int i = 0; i < myArray.length(); i++) {
                         JSONObject jo = myArray.getJSONObject(i);
                         getUc(jo.getInt("codigoUC"), new ICallBack() {
@@ -124,7 +122,7 @@ public class TimeTable extends AppCompatActivity {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(TimeTable.this, "Erro" + error, Toast.LENGTH_SHORT).show();
+                System.out.println("---------errorResponse-----------L125TimeTable");
             }
         });
         queue.add(jsonObjectRequest);
@@ -143,13 +141,12 @@ public class TimeTable extends AppCompatActivity {
         StringRequest sr = new StringRequest(Request.Method.GET, myUrl, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                Toast.makeText(TimeTable.this, "done", Toast.LENGTH_SHORT).show();
                 callback.onSuccess(response);
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(TimeTable.this, "Erro" + error, Toast.LENGTH_SHORT).show();
+                System.out.println("---------errorResponse-----------L152TimeTable" );
 
             }
         });
