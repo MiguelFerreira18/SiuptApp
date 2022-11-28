@@ -28,6 +28,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import es.dmoral.toasty.Toasty;
+
 public class MainActivity extends AppCompatActivity {
     RequestQueue queue;
     String token, myUc;
@@ -69,7 +71,7 @@ public class MainActivity extends AppCompatActivity {
                     token = response;
                     token = token.replace("\n", "").trim();
                     if (token.equals("false")) {
-                        Toast.makeText(MainActivity.this, "Número ou Palavra-Passe incorreta", Toast.LENGTH_SHORT).show();
+                        Toasty.error(MainActivity.this, "Número ou Palavra-Passe incorreta", Toast.LENGTH_SHORT).show();
                     } else {
                         String check = db.authCheck(numero, password);
                         check = check.replace("\n", "");
@@ -87,7 +89,7 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void onErrorResponse(VolleyError error) {
                     System.out.println("-----errorresponse");
-                    Toast.makeText(MainActivity.this, "Número ou Palavra-Passe incorreta", Toast.LENGTH_SHORT).show();
+                    Toasty.error(MainActivity.this, "Número ou Palavra-Passe incorreta", Toast.LENGTH_SHORT).show();
                 }
             });
             queue.add(sr);
@@ -166,7 +168,6 @@ public class MainActivity extends AppCompatActivity {
     private void addAluno(Aluno a) {
         //adiciona o aluno into db
         db.addAluno(a);
-        Toast.makeText(MainActivity.this, "al Add", Toast.LENGTH_SHORT).show();
     }
 
     private void addInscricao() {
@@ -190,7 +191,7 @@ public class MainActivity extends AppCompatActivity {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                System.out.println("-----errorresponse");
+                System.out.println("-----errorresponse----------L194MainActivity");
             }
         });
         queue.add(sr);
@@ -250,7 +251,6 @@ public class MainActivity extends AppCompatActivity {
             public void onResponse(JSONObject response) {
                 try {
                     JSONArray myArray = response.getJSONArray("horario");
-                    Toast.makeText(MainActivity.this, " " + myArray, Toast.LENGTH_LONG).show();
                     for (int i = 0; i < myArray.length(); i++) {
                         JSONObject jo = myArray.getJSONObject(i);
                         getUc(jo.getInt("codigoUC"), new ICallBack() {
@@ -280,7 +280,7 @@ public class MainActivity extends AppCompatActivity {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                System.out.println("-----errorresponse");
+                System.out.println("-----errorresponse----------L283MainActiviy");
 
             }
         });
@@ -328,7 +328,7 @@ public class MainActivity extends AppCompatActivity {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                System.out.println("-----errorresponse");
+                System.out.println("-----errorresponse----------L331MainActiviy");
 
             }
         });
@@ -357,7 +357,7 @@ public class MainActivity extends AppCompatActivity {
             public void onErrorResponse(VolleyError error) {
 
                 myUc = null;
-                System.out.println("-----errorresponse");
+                System.out.println("-----errorresponse----------L360MainActiviy");
             }
         });
         queue.add(sr);

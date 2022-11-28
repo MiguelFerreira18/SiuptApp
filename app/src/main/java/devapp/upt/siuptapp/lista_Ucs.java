@@ -105,7 +105,7 @@ public class lista_Ucs extends AppCompatActivity {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(lista_Ucs.this, "Failed to get Response", Toast.LENGTH_SHORT).show();
+                System.out.println("--------errorResponse---------L108ListaUcs");
             }
         });
         queue.add(jObeject);
@@ -117,19 +117,16 @@ public class lista_Ucs extends AppCompatActivity {
 
     public void getUc(int uc, final ICallBack callback) {
         String myUrl = "https://alunos.upt.pt/~abilioc/dam.php?func=uc&codigo=" + uc;
-        Log.d("cenas", "getUc: " + myUrl);
         //Background work here
         StringRequest sr = new StringRequest(Request.Method.GET, myUrl, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                Toast.makeText(lista_Ucs.this, "done", Toast.LENGTH_SHORT).show();
                 callback.onSuccess(response.replace("\n", ""));
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(lista_Ucs.this, "Erro" + error, Toast.LENGTH_SHORT).show();
-
+                System.out.println("--------errorResponse---------L130ListaUcs");
             }
         });
         queue.add(sr);

@@ -9,6 +9,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 
+import es.dmoral.toasty.Toasty;
+
 public class Menu extends AppCompatActivity {
     public static final String tokenS = "token";
     String token;
@@ -21,6 +23,9 @@ public class Menu extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
+        //TOASTY DE BOAS VINDAS
+        Toasty.success(this, "Bem vindo à app do Siupts", Toasty.LENGTH_LONG).show();
+
         //INTENT11
         i = getIntent();
         token = i.getStringExtra(MainActivity.tokenA);
@@ -51,7 +56,6 @@ public class Menu extends AppCompatActivity {
                 break;
             case R.id.TimeTableMenu:
                 intent = new Intent(this, TimeTable.class);
-                Log.d("Cenas", "onClick: " + i.getStringExtra(MainActivity.tokenA));
                 intent.putExtra(tokenS, token);
                 startActivity(intent);
                 overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_left);

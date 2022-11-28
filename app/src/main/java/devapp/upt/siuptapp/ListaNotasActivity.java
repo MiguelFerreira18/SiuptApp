@@ -110,7 +110,7 @@ public class ListaNotasActivity extends AppCompatActivity {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(ListaNotasActivity.this, "Failed to get Response", Toast.LENGTH_SHORT).show();
+                System.out.println("-------ErrorRespsonse-------L113LIstaNotasActivity");
             }
         });
         queue.add(jObeject);
@@ -135,13 +135,12 @@ public class ListaNotasActivity extends AppCompatActivity {
         StringRequest sr = new StringRequest(Request.Method.GET, myUrl, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                Toast.makeText(ListaNotasActivity.this, "done", Toast.LENGTH_SHORT).show();
                 callback.onSuccess(response);
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(ListaNotasActivity.this, "Erro" + error, Toast.LENGTH_SHORT).show();
+                System.out.println("-------ErrorRespsonse-------L144ListaNotasActiviy");
 
             }
         });

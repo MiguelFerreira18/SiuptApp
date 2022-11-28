@@ -29,6 +29,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import devapp.upt.siuptapp.adapters.AdapterEmenta;
+import es.dmoral.toasty.Toasty;
 
 public class Ementa extends AppCompatActivity {
     Spinner diaSpinner;
@@ -63,6 +64,7 @@ public class Ementa extends AppCompatActivity {
         diaSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                Toasty.info(Ementa.this, "A carregar..." + String.valueOf(i+2), Toasty.LENGTH_SHORT).show();
                 apiRequestEmenta();
             }
 
@@ -110,7 +112,6 @@ public class Ementa extends AppCompatActivity {
                             ementaAdapter.notifyDataSetChanged();
                         }
                     }
-                    Toast.makeText(Ementa.this, "Success", Toast.LENGTH_SHORT).show();
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -120,7 +121,7 @@ public class Ementa extends AppCompatActivity {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(Ementa.this, "Error", Toast.LENGTH_SHORT).show();
+                System.out.println("-------errorResponse---------L125Ementa");
             }
         });
         queue.add(jsonObjectRequest);
