@@ -7,42 +7,58 @@
     tools:context=".TimeTable"
     android:orientation="vertical">
 
-    <com.github.tlaabs.timetableview.TimetableView
-        android:layout_marginTop="15dp"
-        android:id="@+id/myTimeTable"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:column_count="6"
-        app:header_highlight_image_size="36dp"
-        app:header_title="@array/my_header_title"
-        app:row_count="12"
-        app:header_highlight_color="@color/teal_200">
+        android:layout_height="match_parent">
 
-    </com.github.tlaabs.timetableview.TimetableView>
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/finishBtnTimeTable"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="64dp"
-        android:layout_marginEnd="16dp"
-        android:background="@drawable/btn_amarelo"
-        android:elevation="3dp">
-
-        <TextView
-            android:id="@+id/textView14"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/voltar"
-            android:textColor="#000000"
-            android:textSize="22sp"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:orientation="vertical" >
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            <com.github.tlaabs.timetableview.TimetableView
+                android:id="@+id/myTimeTable"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                app:column_count="6"
+                app:header_highlight_color="@color/teal_200"
+                app:header_highlight_image_size="36dp"
+                app:header_title="@array/my_header_title"
+                app:row_count="12">
+
+            </com.github.tlaabs.timetableview.TimetableView>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/finishBtnTimeTable"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginStart="32dp"
+                android:layout_marginTop="64dp"
+                android:layout_marginEnd="16dp"
+                android:background="@drawable/btn_amarelo"
+                android:elevation="3dp">
+
+                <TextView
+                    android:id="@+id/textView14"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/voltar"
+                    android:textColor="#000000"
+                    android:textSize="22sp"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <TextView
+                android:id="@+id/textView15"
+                android:layout_width="wrap_content"
+                android:layout_height="100dp" />
+        </LinearLayout>
+    </ScrollView>
 
 </androidx.appcompat.widget.LinearLayoutCompat>
