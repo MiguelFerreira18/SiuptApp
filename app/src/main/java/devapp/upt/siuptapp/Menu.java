@@ -3,7 +3,10 @@ package devapp.upt.siuptapp;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkCapabilities;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -61,9 +64,12 @@ public class Menu extends AppCompatActivity {
                 overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_left);
                 break;
             case R.id.Ementa:
+                if (isConnected()){
                 intent = new Intent(this, Ementa.class);
                 startActivity(intent);
                 overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_left);
+                }
+                Toasty.info(this, "Só pode aceder à ementa com internet", Toasty.LENGTH_LONG).show();
                 break;
             case R.id.Incricao:
                 intent = new Intent(this, lista_Ucs.class);
@@ -77,6 +83,31 @@ public class Menu extends AppCompatActivity {
                 break;
 
         }
+    }
+
+    /**
+     * verifica se existe uma conexão com a internet/wifi
+     *
+     * @return
+     */
+    public boolean isConnected() {
+        ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        if (connectivityManager != null) {
+            NetworkCapabilities capabilities = connectivityManager.getNetworkCapabilities(connectivityManager.getActiveNetwork());
+            if (capabilities != null) {
+                if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)) {
+                    Log.i("Internet", "NetworkCapabilities.TRANSPORT_CELLULAR");
+                    return true;
+                } else if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)) {
+                    Log.i("Internet", "NetworkCapabilities.TRANSPORT_WIFI");
+                    return true;
+                } else if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET)) {
+                    Log.i("Internet", "NetworkCapabilities.TRANSPORT_ETHERNET");
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
 
