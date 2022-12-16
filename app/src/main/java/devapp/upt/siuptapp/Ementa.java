@@ -64,7 +64,7 @@ public class Ementa extends AppCompatActivity {
         diaSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                Toasty.info(Ementa.this, "A carregar..." + String.valueOf(i+2), Toasty.LENGTH_SHORT).show();
+                Toasty.info(Ementa.this, "A carregar "+ diaSpinner.getSelectedItem().toString(), Toasty.LENGTH_SHORT).show();
                 apiRequestEmenta();
             }
 
@@ -87,7 +87,7 @@ public class Ementa extends AppCompatActivity {
 
 
     public void populateSpinner() {
-        String[] dias = {"2", "3", "4", "5", "6"};
+        String[] dias = {"Segunda-Feira", "Terça-Feira", "Quarta-Feira", "Quinta-Feira", "Sexta-Feira"};
         ArrayAdapter<String> adapterSpinner = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, dias);
         diaSpinner.setAdapter(adapterSpinner);
     }
@@ -104,7 +104,8 @@ public class Ementa extends AppCompatActivity {
                     }
                     for (int i = 0; i < ementa.length(); i++) {
                         JSONObject ementaObject = ementa.getJSONObject(i);
-                        if (ementaObject.getInt("diaSemana") == Integer.parseInt(diaSpinner.getSelectedItem().toString())) {
+                        int dia = diaSemana(diaSpinner.getSelectedItem().toString());
+                        if (ementaObject.getInt("diaSemana") == dia ) {
                             ementas.add(new EmentaModel(ementaObject.getString("sopa"), ementaObject.getInt("diaSemana")));
                             ementas.add(new EmentaModel(ementaObject.getString("pratoCarne"), ementaObject.getInt("diaSemana")));
                             ementas.add(new EmentaModel(ementaObject.getString("pratoPeixe"), ementaObject.getInt("diaSemana")));
@@ -115,8 +116,6 @@ public class Ementa extends AppCompatActivity {
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-
-
             }
         }, new Response.ErrorListener() {
             @Override
@@ -125,5 +124,20 @@ public class Ementa extends AppCompatActivity {
             }
         });
         queue.add(jsonObjectRequest);
+    }
+    public int diaSemana(String dia){
+        switch(dia){
+            case "Segunda-Feira":
+                return 2;
+            case "Terça-Feira":
+                return 3;
+            case "Quarta-Feira":
+                return 4;
+            case "Quinta-Feira":
+                return 5;
+            case "Sexta-Feira":
+                return 6;
+        }
+        return -1;
     }
 }
